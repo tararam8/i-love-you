@@ -36,88 +36,958 @@ body{display:flex;justify-content:center;align-items:flex-start;overflow-x:hidde
 <script>
 const Q = [["Если я говорю «я не хочу есть», насколько вероятно, что через час я скажу, что голодная?", "А) 10%", "Б) 50%", "В) 90%", "В"], ["Если мне что-то очень нравится, я скорее…", "А) Буду постоянно об этом говорить", "Б) Сделаю вид, что мне всё равно", "В) Никому об этом не расскажу", "А"], ["Если я устала, что во мне меняется первым?", "А) Настроение", "Б) Аппетит", "В) Желание разговаривать", "В"], ["Если я чего-то хочу, но боюсь попросить, я скорее…", "А) Намекну", "Б) Скажу прямо", "В) Вообще ничего не скажу", "А"], ["Если я обиделась, но не хочу говорить об этом, я скорее…", "А) Стану холоднее, но буду делать вид, что всё хорошо", "Б) Буду общаться как всегда", "В) Сразу скажу", "А"], ["Если я нервничаю перед чем-то важным, я скорее…", "А) Перестаю нормально спать", "Б) Начинаю всё перепроверять", "В) Стараюсь вообще об этом не думать", "В"], ["Когда я очень счастлива, я скорее…", "А) Начинаю много говорить", "Б) Становлюсь спокойнее", "В) Не могу перестать улыбаться", "В"], ["Если я не хочу что-то делать, меня легче всего убедить…", "А) Хорошей аргументацией", "Б) Лаской и заботой", "В) Шуткой", "Б"], ["Что я обычно делаю перед тем, как начать важное дело?", "А) Откладываю его", "Б) Всё перепроверяю", "В) Сразу начинаю", "А"], ["Что я делаю, когда пытаюсь скрыть, что расстроилась?", "А) Становлюсь слишком спокойной", "Б) Начинаю улыбаться и шутить", "В) Просто молчу", "В"], ["Как я обычно реагирую на неловкую ситуацию?", "А) Шучу", "Б) Молчу", "В) Хочу поскорее уйти", "А"], ["Если я внезапно замолчала во время разговора, скорее всего…", "А) Я обиделась", "Б) Я что-то обдумываю", "В) Я просто устала", "А"], ["Если я говорю «всё нормально», что это означает?", "А) Всё нормально", "Б) Всё хорошо", "В) Всё плохо", "В"], ["Что мне сложнее всего сделать после ссоры?", "А) Написать первой", "Б) Признать, что я была неправа", "В) Перестать думать о ситуации", "Б"], ["Если я чего-то сильно жду, я скорее…", "А) Постоянно проверяю время", "Б) Стараюсь отвлечься", "В) Представляю, как всё произойдёт", "В"], ["Как я реагирую, когда планы внезапно меняются?", "А) Спокойно перестраиваюсь", "Б) Меня это раздражает", "В) Сначала паникую, потом привыкаю", "Б"], ["Если мне нужно выбрать подарок человеку, я скорее…", "А) Буду искать идеальный вариант", "Б) Выберу что-нибудь практичное", "В) Придумаю что-нибудь личное", "А"], ["Что меня может обидеть сильнее всего?", "А) Равнодушие", "Б) Резкие слова", "В) Когда меня не слышат", "А"], ["Что для меня хуже?", "А) Когда человек врёт", "Б) Когда человек скрывает правду", "В) Когда человек делает вид, что ему всё равно", "А"], ["Что мне труднее всего сказать человеку, который мне дорог?", "А) «Мне больно»", "Б) «Мне тебя не хватает»", "В) «Мне нужна твоя помощь»", "В"], ["Когда я действительно доверяю человеку, я…", "А) Рассказываю ему практически всё", "Б) Перестаю контролировать каждую мелочь", "В) Не боюсь показывать слабость", "В"], ["Что меня быстрее всего успокоит после плохого дня?", "А) Разговор", "Б) Объятия", "В) Время наедине с собой", "Б"], ["Что заставляет меня чувствовать себя особенно любимой?", "А) Когда меня слушают", "Б) Когда обо мне заботятся без просьб", "В) Когда мне говорят о своих чувствах", "Б"], ["Что я скорее замечу: большой подарок или маленькую деталь, которую человек запомнил обо мне?", "А) Большой подарок", "Б) Маленькую деталь", "В) Зависит от ситуации", "Б"], ["Если я переживаю из-за чего-то, что мне нужно от близкого человека?", "А) Совет", "Б) Поддержка", "В) Решение проблемы", "В"], ["Как я понимаю, что человек действительно меня любит?", "А) По его словам", "Б) По его поступкам", "В) По тому, как он ведёт себя со мной в мелочах", "В"], ["Если я говорю «мне не холодно», что вероятнее всего произойдёт через некоторое время?", "А) Мне действительно не станет холодно", "Б) Я всё-таки замёрзну", "В) Я начну жаловаться на холод", "Б"], ["Если я говорю «я не обиделась», что это может означать?", "А) Я не обиделась", "Б) Я обиделась, но не хочу говорить", "В) Я уже почти перестала обижаться", "Б"], ["Если я начинаю рассказывать одну историю и внезапно ухожу в сторону, я…", "А) Забыла, о чём говорила", "Б) Просто вспомнила ещё одну историю", "В) Проверяю твоё внимание", "Б"], ["Как я могу вести себя в одной и той же ситуации?", "А) Всегда одинаково", "Б) По-разному — всё зависит от моего настроения", "В) Обычно противоположно тому, чего от меня ожидают", "Б"], ["Что лучше всего описывает моё настроение?", "А) Его довольно легко предсказать", "Б) Оно часто меняется", "В) Оно почти никогда не меняется", "Б"], ["Я говорю: «Ничего». Перевод с моего языка:", "А) Ничего", "Б) Сейчас лучше не продолжать этот разговор", "В) Конечно же, это значит совсем не «ничего»", "В"], ["Если я говорю «мне всё равно», скорее всего…", "А) Мне действительно всё равно", "Б) Мне не всё равно, просто я не хочу это показывать", "В) Я ещё не определилась", "Б"], ["Если я рассказываю тебе какую-то мелочь, которая произошла за день, это скорее значит, что…", "А) Мне просто нечем заняться", "Б) Мне хочется поделиться именно с тобой", "В) Я хочу услышать твоё мнение", "Б"], ["Если мне хочется внимания, но я не хочу просить его напрямую, я скорее…", "А) Стану сама чаще писать", "Б) Начну намекать", "В) Сделаю вид, что мне вообще не нужно внимание", "Б"], ["Если мы долго не виделись, что мне важнее всего в нашей встрече?", "А) Чтобы мы куда-нибудь сходили", "Б) Просто побыть рядом с тобой", "В) Чтобы мы много разговаривали", "Б"], ["Если я рассказываю тебе о своей проблеме, чего я чаще всего хочу в первую очередь?", "А) Чтобы ты решил проблему", "Б) Чтобы ты просто выслушал меня", "В) Чтобы ты меня отвлёк", "А"], ["Если я говорю, что «ничего не хочу», но ты знаешь, что я устала, что мне скорее всего нужно?", "А) Чтобы меня оставили одну", "Б) Забота и внимание без лишних вопросов", "В) Чтобы меня рассмешили", "Б"], ["Если я получаю от тебя неожиданный подарок или сюрприз, что меня тронет сильнее всего?", "А) Сам факт подарка", "Б) То, что ты запомнил какую-то мелочь обо мне", "В) Его стоимость и масштаб", "Б"], ["Если я вдруг начинаю говорить «ладно, всё», скорее всего…", "А) Я действительно закончила разговор", "Б) Я устала объяснять, жду понимание", "В) Я просто хочу сменить тему", "Б"], ["Что для меня важнее всего в отношениях?", "А) Постоянно проводить всё свободное время вместе", "Б) Чувствовать, что меня любят и выбирают даже в мелочах", "В) Никогда не ссориться", "Б"], ["Если я получила хорошую новость, кому мне скорее всего захочется рассказать об этом первой?", "А) Тебе", "Б) Подруге", "В) Я вообще никому сразу не расскажу", "А"], ["Если мне что-то приснилось и сон был странным, я скорее…", "А) Забуду о нём через пять минут", "Б) Буду весь день думать, что он значит", "В) Расскажу тебе и буду обсуждать его", "В"], ["Если ты заметишь, что я стала отвечать короче обычного, это скорее значит, что…", "А) Я просто занята", "Б) Что-то произошло и меня это задело", "В) Я просто устала от общения", "Б"], ["Если я долго выбираю, что надеть, скорее всего…", "А) Я не знаю, чего хочу", "Б) Я хочу, чтобы всё выглядело именно так, как я придумала", "В) Я в итоге надену первое, что увидела", "Б"], ["Если я говорю «потом расскажу», скорее всего…", "А) Я действительно забуду", "Б) Сейчас не подходящий момент, но я хочу рассказать", "В) Я передумала рассказывать", "А"], ["Если я что-то очень хочу купить, но сомневаюсь, я скорее…", "А) Куплю сразу", "Б) Буду долго думать, нужно ли мне это", "В) Попрошу тебя решить за меня", "Б"], ["Если я не могу уснуть, что вероятнее всего происходит у меня в голове?", "А) Ни о чем не думаю", "Б) Я начинаю думать обо всём подряд", "В) Я думаю только о том, что произошло за день", "Б"], ["Если я сказала «мне всё равно, выбирай сам», что я могу сделать через пять минут?", "А) Действительно соглашусь с твоим выбором", "Б) Вдруг предложу свой вариант", "В) Спрошу, почему ты выбрал именно это", "Б"], ["Если мне хочется плакать, но я стараюсь держаться, я скорее…", "А) Стану молчаливой", "Б) Начну очень много шутить", "В) Постараюсь сделать вид, что всё нормально", "В"]];
 const app=document.getElementById('app');
-let state={page:'login',envelope:0,q:0,selected:null,score:0};
-function img(n){return `<img class="page" src="page-${String(n).padStart(2,'0')}.webp" alt="">`;}
-function screen(cls,inner){return `<section class="screen active ${cls}">${inner}</section>`;}
-function nav(){return `
-<button class="hot nav-home" onclick="go('home')" aria-label="Главная"></button>
-<button class="hot nav-about" onclick="go('about')" aria-label="О тебе"></button>
-<button class="hot nav-us" onclick="go('us')" aria-label="Мы"></button>
-<button class="hot nav-test" onclick="go('testIntro')" aria-label="Тест"></button>
-<button class="hot nav-when" onclick="go('when')" aria-label="Когда"></button>`;}
+
+let state={
+  page:'login',
+  envelope:0,
+  q:0,
+  selected:null,
+  score:0
+};
+
+/* ---------- ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ---------- */
+
+const extraStyle=document.createElement('style');
+
+extraStyle.textContent=`
+
+button{
+  -webkit-appearance:none;
+  appearance:none;
+  font:inherit;
+}
+
+.hot,
+.about-envelope,
+.login-heart,
+.envelope-open-screen,
+.start-test,
+.option-button,
+.test-back-button,
+.test-next-button,
+.final-home{
+  -webkit-appearance:none;
+  appearance:none;
+  border:0;
+}
+
+.hot,
+.about-envelope,
+.login-heart,
+.envelope-open-screen,
+.start-test{
+  background:transparent!important;
+}
+
+.nav-home,
+.nav-about,
+.nav-us,
+.nav-test,
+.nav-when{
+  z-index:100!important;
+}
+
+/* Вход */
+
+.login-heart{
+  position:absolute;
+  z-index:25;
+  left:25%;
+  top:28%;
+  width:50%;
+  height:38%;
+  cursor:pointer;
+}
+
+#loginInput{
+  z-index:30!important;
+}
+
+/* Конверты */
+
+.about-envelope{
+  z-index:30!important;
+  padding:0!important;
+  margin:0!important;
+  cursor:pointer;
+  font-size:0;
+  outline:none;
+}
+
+.envelope-open-screen{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  padding:0;
+  margin:0;
+  z-index:30;
+  cursor:pointer;
+  font-size:0;
+}
+
+.envelope-open-screen .page{
+  pointer-events:none;
+}
+
+.back-about,
+.back-open{
+  z-index:50!important;
+  left:0!important;
+  bottom:0!important;
+  width:20%!important;
+  height:18%!important;
+  cursor:pointer;
+}
+
+/* Кнопка начала теста */
+
+.start-test{
+  z-index:100!important;
+  left:35%!important;
+  top:74%!important;
+  width:30%!important;
+  height:16%!important;
+  cursor:pointer;
+}
+
+/* Тест */
+
+.test-overlay{
+  z-index:40!important;
+  pointer-events:none!important;
+}
+
+.test-cover{
+  pointer-events:none!important;
+}
+
+.test-counter,
+.test-card{
+  pointer-events:none!important;
+}
+
+.option-button{
+  position:absolute;
+  left:50%;
+  width:47%;
+  min-height:5.8%;
+  z-index:70;
+  display:flex;
+  align-items:center;
+  gap:2.5%;
+  padding:0 1%!important;
+  background:transparent!important;
+  cursor:pointer;
+  text-align:left;
+  font-family:'Courier New',monospace;
+  font-weight:900;
+  font-size:clamp(12px,1.55vw,22px);
+  line-height:1.15;
+  pointer-events:auto!important;
+}
+
+.option-button:nth-of-type(1){
+  top:68%;
+}
+
+.option-button:nth-of-type(2){
+  top:74%;
+}
+
+.option-button:nth-of-type(3){
+  top:80%;
+}
+
+.option-square{
+  flex:0 0 auto;
+  width:clamp(18px,3.8vw,38px);
+  aspect-ratio:1;
+  border:4px solid #111;
+  background:#ffe8ef;
+  display:block;
+}
+
+.option-button.selected .option-square{
+  background:#ff168e;
+  border-color:#ff168e;
+}
+
+.option-text{
+  display:block;
+  max-width:90%;
+}
+
+.test-back-button{
+  position:absolute;
+  z-index:90;
+  left:1%!important;
+  top:1%!important;
+  width:20%!important;
+  height:10%!important;
+  background:transparent!important;
+  color:#d83c8d;
+  font-family:'Courier New',monospace;
+  font-weight:900;
+  font-size:clamp(12px,1.5vw,20px);
+  cursor:pointer;
+  pointer-events:auto!important;
+}
+
+.test-next-button{
+  position:absolute;
+  z-index:90;
+  right:3%;
+  bottom:7%;
+  width:16%;
+  height:14%;
+  background:transparent!important;
+  color:#d83c8d;
+  font-family:'Courier New',monospace;
+  font-size:clamp(28px,4vw,48px);
+  font-weight:900;
+  cursor:pointer;
+  pointer-events:auto!important;
+}
+
+.test-next-button:not(.ready){
+  opacity:.25;
+  cursor:default;
+}
+
+/* Финальный экран */
+
+.final{
+  position:absolute!important;
+  inset:0!important;
+  z-index:200!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(255,215,230,.96)!important;
+}
+
+.final-box{
+  max-width:700px;
+  padding:8%;
+  text-align:center;
+  font-family:'Courier New',monospace;
+  font-weight:900;
+  color:#c72d7a;
+}
+
+.final-title{
+  font-size:clamp(28px,5vw,50px);
+  line-height:1.2;
+}
+
+.final-score{
+  margin-top:25px;
+  font-size:clamp(22px,4vw,40px);
+}
+
+.final-text{
+  margin-top:25px;
+  font-size:clamp(18px,3vw,30px);
+  line-height:1.3;
+}
+
+.final-home{
+  margin-top:30px;
+  padding:14px 26px;
+  background:#d83c8d!important;
+  color:#fff;
+  border-radius:8px;
+  font-weight:900;
+  font-size:18px;
+  cursor:pointer;
+}
+
+@media(max-width:600px){
+
+  .option-button{
+    font-size:12px;
+  }
+
+  .option-square{
+    border-width:3px;
+  }
+
+  .test-next-button{
+    font-size:30px;
+  }
+
+}
+
+`;
+
+document.head.appendChild(extraStyle);
+
+
+/* ---------- КАРТИНКИ ---------- */
+
+function img(n){
+  return `<img class="page" src="page-${String(n).padStart(2,'0')}.webp" alt="">`;
+}
+
+
+/* ---------- ЭКРАН ---------- */
+
+function screen(cls,inner){
+  return `<section class="screen active ${cls}">${inner}</section>`;
+}
+
+
+/* ---------- НАВИГАЦИЯ ---------- */
+
+function nav(){
+
+  return `
+    <button
+      class="hot nav-home"
+      onclick="go('home')"
+      aria-label="Главная">
+    </button>
+
+    <button
+      class="hot nav-about"
+      onclick="go('about')"
+      aria-label="О тебе">
+    </button>
+
+    <button
+      class="hot nav-us"
+      onclick="go('us')"
+      aria-label="Мы">
+    </button>
+
+    <button
+      class="hot nav-test"
+      onclick="go('testIntro')"
+      aria-label="Тест">
+    </button>
+
+    <button
+      class="hot nav-when"
+      onclick="go('when')"
+      aria-label="Когда">
+    </button>
+  `;
+
+}
+
+
+/* ---------- ОТРИСОВКА ---------- */
 
 function render(){
- let s='';
- if(state.page==='login'){
-  s=screen('login',img(1)+`<button onclick="login()" style="position:absolute;left:35%;top:35%;width:30%;height:30%;z-index:20;background:transparent;border:0;cursor:pointer"></button><input id="loginInput" inputmode="numeric" maxlength="6" autocomplete="off" aria-label="Код" style="z-index:30"><div id="err" class="login-error">Неправильная дата</div>`);
- }else if(state.page==='home'){
-  s=screen('home',img(2)+nav()+`<button class="hot main-short" onclick="go('homeShort')" aria-label="Сократить"></button>`);
- }else if(state.page==='homeShort'){
-  s=screen('home-short',img(3)+nav()+`<button class="hot main-back" onclick="go('home')" aria-label="Обратно"></button>`);
- }else if(state.page==='about'){
-  s=screen('about',img(4)+nav()+`
-   <button class="about-envelope env1" onclick="openEnvelope(1)" aria-label="Конверт 1"></button>
-   <button class="about-envelope env2" onclick="openEnvelope(2)" aria-label="Конверт 2"></button>
-   <button class="about-envelope env3" onclick="openEnvelope(3)" aria-label="Конверт 3"></button>
-   <button class="about-envelope env4" onclick="openEnvelope(4)" aria-label="Конверт 4"></button>
-   <button class="about-envelope env5" onclick="openEnvelope(5)" aria-label="Конверт 5"></button>`);
- }else if(state.page==='envClosed'){
-  s=screen('envclosed',img(5+2*(state.envelope-1))+`<button class="hot" style="left:30%;top:30%;width:40%;height:45%" onclick="openLetter(${state.envelope})" aria-label="Открыть"></button><button class="hot back-about" onclick="go('about')" aria-label="Назад"></button>`);
- }else if(state.page==='letter'){
-  const page=6+2*(state.envelope-1);
-  s=screen('letter',img(page)+`<button class="hot back-open" onclick="go('about')" aria-label="Назад"></button>`);
-}else if(state.page==='us'){
-  s=screen('us',img(15)+nav());
- }else if(state.page==='when'){
-  s=screen('when',img(18)+nav());
- }else if(state.page==='testIntro'){
-  s=screen('test-intro',img(16)+nav()+`<button class="hot start-test" onclick="startTest()" aria-label="Начать тест"></button>`);
- }else if(state.page==='test'){
-  s=renderTest();
- }
- app.innerHTML=s;
- if(state.page==='login'){
-  const inp=document.getElementById('loginInput');
-  inp.addEventListener('keydown',e=>{if(e.key==='Enter')login();});
-  inp.focus();
- }
+
+  let s='';
+
+
+  /* ВХОД */
+
+  if(state.page==='login'){
+
+    s=screen(
+      'login',
+
+      img(1)+
+
+      `
+      <input
+        id="loginInput"
+        inputmode="numeric"
+        maxlength="6"
+        autocomplete="off"
+        aria-label="Код"
+      >
+
+      <button
+        class="login-heart"
+        onclick="login()"
+        aria-label="Войти">
+      </button>
+
+      <div id="err" class="login-error">
+        Неправильная дата
+      </div>
+      `
+    );
+
+  }
+
+
+  /* ГЛАВНАЯ */
+
+  else if(state.page==='home'){
+
+    s=screen(
+      'home',
+
+      img(2)+
+
+      nav()+
+
+      `
+      <button
+        class="hot main-short"
+        onclick="go('homeShort')"
+        aria-label="Сократить">
+      </button>
+      `
+    );
+
+  }
+
+
+  /* ГЛАВНАЯ — СОКРАЩЁННАЯ */
+
+  else if(state.page==='homeShort'){
+
+    s=screen(
+      'home-short',
+
+      img(3)+
+
+      nav()+
+
+      `
+      <button
+        class="hot main-back"
+        onclick="go('home')"
+        aria-label="Обратно">
+      </button>
+      `
+    );
+
+  }
+
+
+  /* О ТЕБЕ */
+
+  else if(state.page==='about'){
+
+    s=screen(
+      'about',
+
+      img(4)+
+
+      nav()+
+
+      `
+      <button
+        class="about-envelope env1"
+        onclick="openEnvelope(1)"
+        aria-label="Конверт 1">
+      </button>
+
+      <button
+        class="about-envelope env2"
+        onclick="openEnvelope(2)"
+        aria-label="Конверт 2">
+      </button>
+
+      <button
+        class="about-envelope env3"
+        onclick="openEnvelope(3)"
+        aria-label="Конверт 3">
+      </button>
+
+      <button
+        class="about-envelope env4"
+        onclick="openEnvelope(4)"
+        aria-label="Конверт 4">
+      </button>
+
+      <button
+        class="about-envelope env5"
+        onclick="openEnvelope(5)"
+        aria-label="Конверт 5">
+      </button>
+      `
+    );
+
+  }
+
+
+  /* ЗАКРЫТЫЙ КОНВЕРТ */
+
+  else if(state.page==='envClosed'){
+
+    const page=5+2*(state.envelope-1);
+
+    s=screen(
+      'envclosed',
+
+      img(page)+
+
+      `
+      <button
+        class="envelope-open-screen"
+        onclick="openLetter(${state.envelope})"
+        aria-label="Открыть конверт">
+      </button>
+
+      <button
+        class="hot back-about"
+        onclick="go('about')"
+        aria-label="Назад">
+      </button>
+      `
+    );
+
+  }
+
+
+  /* ОТКРЫТОЕ ПИСЬМО */
+
+  else if(state.page==='letter'){
+
+    const page=6+2*(state.envelope-1);
+
+    s=screen(
+      'letter',
+
+      img(page)+
+
+      `
+      <button
+        class="hot back-open"
+        onclick="go('about')"
+        aria-label="Назад">
+      </button>
+      `
+    );
+
+  }
+
+
+  /* МЫ */
+
+  else if(state.page==='us'){
+
+    s=screen(
+      'us',
+      img(15)+nav()
+    );
+
+  }
+
+
+  /* КОГДА */
+
+  else if(state.page==='when'){
+
+    s=screen(
+      'when',
+      img(18)+nav()
+    );
+
+  }
+
+
+  /* НАЧАЛО ТЕСТА */
+
+  else if(state.page==='testIntro'){
+
+    s=screen(
+      'test-intro',
+
+      img(16)+
+
+      nav()+
+
+      `
+      <button
+        class="hot start-test"
+        onclick="startTest()"
+        aria-label="Начать тест">
+      </button>
+      `
+    );
+
+  }
+
+
+  /* ТЕСТ */
+
+  else if(state.page==='test'){
+
+    s=renderTest();
+
+  }
+
+
+  app.innerHTML=s;
+
+
+  /* ФОКУС НА ПОЛЕ КОДА */
+
+  if(state.page==='login'){
+
+    const input=document.getElementById('loginInput');
+
+    if(input){
+
+      input.addEventListener(
+        'keydown',
+        function(e){
+
+          if(e.key==='Enter'){
+            login();
+          }
+
+        }
+      );
+
+      input.focus();
+
+    }
+
+  }
+
 }
+
+
+/* ---------- ВХОД ---------- */
+
 function login(){
- const v=document.getElementById('loginInput').value.trim(),err=document.getElementById('err');
- if(v==='130425')go('home');else err.classList.add('show');
+
+  const input=document.getElementById('loginInput');
+  const err=document.getElementById('err');
+
+  if(!input)return;
+
+  const value=input.value.trim();
+
+  if(value==='130425'){
+
+    state.page='home';
+
+    render();
+
+  }else{
+
+    input.value='';
+
+    if(err){
+
+      err.classList.add('show');
+
+      setTimeout(
+        function(){
+          err.classList.remove('show');
+        },
+        1800
+      );
+
+    }
+
+  }
+
 }
-function go(p){state.page=p;state.selected=null;render();window.scrollTo(0,0);}
-function openEnvelope(n){state.envelope=n;state.page='envClosed';render();}
-function openLetter(n){state.envelope=n;state.page='letter';render();}
-function startTest(){state.q=0;state.selected=null;state.score=0;state.page='test';render();}
-function escapeHtml(x){return x.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+
+
+/* ---------- ПЕРЕХОД ---------- */
+
+function go(page){
+
+  state.page=page;
+  state.selected=null;
+
+  render();
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* ---------- КОНВЕРТЫ ---------- */
+
+function openEnvelope(n){
+
+  state.envelope=n;
+  state.page='envClosed';
+
+  render();
+
+}
+
+
+/* ---------- ПИСЬМО ---------- */
+
+function openLetter(n){
+
+  state.envelope=n;
+  state.page='letter';
+
+  render();
+
+}
+
+
+/* ---------- НАЧАЛО ТЕСТА ---------- */
+
+function startTest(){
+
+  state.q=0;
+  state.selected=null;
+  state.score=0;
+  state.page='test';
+
+  render();
+
+}
+
+
+/* ---------- ЭКРАНИРОВАНИЕ ТЕКСТА ---------- */
+
+function escapeHtml(x){
+
+  return String(x).replace(
+    /[&<>"']/g,
+
+    function(m){
+
+      return {
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#039;'
+      }[m];
+
+    }
+  );
+
+}
+
+
+/* ---------- ТЕСТ ---------- */
+
 function renderTest(){
- const [question,a,b,c,correct]=Q[state.q],picked=state.selected;
- return screen('test',img(17)+nav()+`
-  <div class="test-overlay">
-   <div class="test-cover"></div>
-   <div class="test-counter">${state.q+1}/50</div>
-   <div class="test-card">${escapeHtml(question)}</div>
-   <div class="option-box ${picked==='А'?'sel':''}" style="top:69.4%" onclick="pick('А')"></div>
-   <div class="option-box ${picked==='Б'?'sel':''}" style="top:75.3%" onclick="pick('Б')"></div>
-   <div class="option-box ${picked==='В'?'sel':''}" style="top:81.2%" onclick="pick('В')"></div>
-   <div class="option-label obb-a" onclick="pick('А')">${escapeHtml(a)}</div>
-   <div class="option-label obb-b" onclick="pick('Б')">${escapeHtml(b)}</div>
-   <div class="option-label obb-c" onclick="pick('В')">${escapeHtml(c)}</div>
-   ${state.q>0?`<button class="hot test-back" onclick="prevQuestion()">← назад</button>`:''}
-   <button class="test-next-overlay" ${picked?'':'disabled'} onclick="nextQuestion()" aria-label="Следующий вопрос"></button>
-  </div>`);
+
+  const current=Q[state.q];
+
+  if(!current){
+
+    showFinal();
+
+    return '';
+
+  }
+
+  const question=current[0];
+  const a=current[1];
+  const b=current[2];
+  const c=current[3];
+
+  const picked=state.selected;
+
+
+  return screen(
+
+    'test',
+
+    img(17)+
+
+    nav()+
+
+    `
+    <div class="test-overlay">
+
+      <div class="test-cover"></div>
+
+      <div class="test-counter">
+        ${state.q+1}/50
+      </div>
+
+      <div class="test-card">
+        ${escapeHtml(question)}
+      </div>
+
+
+      <button
+        class="option-button ${picked==='А'?'selected':''}"
+        style="top:69.4%"
+        onclick="pick('А')">
+
+        <span class="option-square"></span>
+
+        <span class="option-text">
+          ${escapeHtml(a)}
+        </span>
+
+      </button>
+
+
+      <button
+        class="option-button ${picked==='Б'?'selected':''}"
+        style="top:75.3%"
+        onclick="pick('Б')">
+
+        <span class="option-square"></span>
+
+        <span class="option-text">
+          ${escapeHtml(b)}
+        </span>
+
+      </button>
+
+
+      <button
+        class="option-button ${picked==='В'?'selected':''}"
+        style="top:81.2%"
+        onclick="pick('В')">
+
+        <span class="option-square"></span>
+
+        <span class="option-text">
+          ${escapeHtml(c)}
+        </span>
+
+      </button>
+
+
+      ${
+        state.q>0
+        ?
+        `
+        <button
+          class="test-back-button"
+          onclick="prevQuestion()">
+
+          ← назад
+
+        </button>
+        `
+        :
+        ''
+      }
+
+
+      <button
+        class="test-next-button ${picked?'ready':''}"
+        onclick="nextQuestion()"
+        ${picked?'':'disabled'}>
+
+        →
+
+      </button>
+
+    </div>
+    `
+
+  );
+
 }
-function pick(v){state.selected=v;render();}
+
+
+/* ---------- ВЫБОР ОТВЕТА ---------- */
+
+function pick(value){
+
+  state.selected=value;
+
+  render();
+
+}
+
+
+/* ---------- СЛЕДУЮЩИЙ ВОПРОС ---------- */
+
 function nextQuestion(){
- if(!state.selected)return;
- if(state.selected===Q[state.q][4])state.score++;
- if(state.q===49){showFinal();return;}
- state.q++;state.selected=null;render();window.scrollTo(0,0);
+
+  if(state.selected===null){
+    return;
+  }
+
+  const current=Q[state.q];
+
+  if(state.selected===current[4]){
+    state.score++;
+  }
+
+
+  if(state.q>=Q.length-1){
+
+    showFinal();
+
+    return;
+
+  }
+
+
+  state.q++;
+  state.selected=null;
+
+  render();
+
+  window.scrollTo(0,0);
+
 }
-function prevQuestion(){if(state.q>0){state.q--;state.selected=null;render();window.scrollTo(0,0);}}
+
+
+/* ---------- НАЗАД В ТЕСТЕ ---------- */
+
+function prevQuestion(){
+
+  if(state.q<=0){
+    return;
+  }
+
+  state.q--;
+  state.selected=null;
+
+  render();
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* ---------- ФИНАЛ ---------- */
+
 function showFinal(){
- app.innerHTML=screen('final',img(17)+`<div class="final"><div class="box">Тест закончен 💗<br><br>Ты набрал ${state.score} из 50.<br><br>Спасибо, что знаешь меня всё лучше.<br><br>Я люблю тебя.<br><button onclick="go('home')">На главную</button></div></div>`);
+
+  const percent=Math.round((state.score/Q.length)*100);
+
+  app.innerHTML=screen(
+    'result',
+
+    `
+    <div class="final">
+
+      <div class="final-box">
+
+        <div class="final-title">
+          Тест закончен 💗
+        </div>
+
+        <div class="final-score">
+          Ты набрал ${state.score} из ${Q.length}.
+          <br>
+          Это ${percent}%!
+        </div>
+
+        <div class="final-text">
+          Спасибо, что знаешь меня всё лучше.
+          <br><br>
+          Я люблю тебя.
+        </div>
+
+        <button
+          class="final-home"
+          onclick="go('home')">
+
+          На главную
+
+        </button>
+
+      </div>
+
+    </div>
+    `
+  );
+
 }
-render();
-</script></body></html>
