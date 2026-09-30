@@ -87,7 +87,7 @@ function login(){
  if(v==='130425')go('home');else err.classList.add('show');
 }
 function go(p){state.page=p;state.selected=null;render();window.scrollTo(0,0);}
-function openEnvelope(n){state.envelope=n;state.page='envClosed';render();setTimeout(()=>openLetter(n),650);}
+function openEnvelope(n){state.envelope=n;state.page='envClosed';render();}
 function openLetter(n){state.envelope=n;state.page='letter';render();}
 function startTest(){state.q=0;state.selected=null;state.score=0;state.page='test';render();}
 function escapeHtml(x){return x.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
