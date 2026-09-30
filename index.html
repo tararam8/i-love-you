@@ -49,7 +49,7 @@ function nav(){return `
 function render(){
  let s='';
  if(state.page==='login'){
-  s=screen('login',img(1)+`<button onclick="login()" style="position:absolute;left:35%;top:35%;width:30%;height:30%;z-index:100;background:transparent;border:0;cursor:pointer"></button><input id="loginInput" inputmode="numeric" maxlength="6" autocomplete="off" aria-label="Код"><div id="err" class="login-error">Неправильная дата</div>`);
+  s=screen('login',img(1)+`<button onclick="login()" style="position:absolute;left:35%;top:35%;width:30%;height:30%;z-index:20;background:transparent;border:0;cursor:pointer"></button><input id="loginInput" inputmode="numeric" maxlength="6" autocomplete="off" aria-label="Код" style="z-index:30"><div id="err" class="login-error">Неправильная дата</div>`);
  }else if(state.page==='home'){
   s=screen('home',img(2)+nav()+`<button class="hot main-short" onclick="go('homeShort')" aria-label="Сократить"></button>`);
  }else if(state.page==='homeShort'){
