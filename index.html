@@ -66,7 +66,7 @@ function render(){
  }else if(state.page==='letter'){
   const page=6+2*(state.envelope-1);
   s=screen('letter',img(page)+`<button class="hot back-open" onclick="go('about')" aria-label="Назад"></button>`);
- }else if(state.page==='us'){
+}else if(state.page==='us'){
   s=screen('us',img(15)+nav());
  }else if(state.page==='when'){
   s=screen('when',img(18)+nav());
