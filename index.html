@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Любовь</title>
+<style>
+*{box-sizing:border-box} html,body{margin:0;padding:0;background:#000;min-height:100%;font-family:Arial,sans-serif}
+body{display:flex;justify-content:center;align-items:flex-start;overflow-x:hidden}
+#app{width:min(100vw,1000px);position:relative;background:#000}
+.screen{position:relative;width:100%;display:none;overflow:hidden}.screen.active{display:block}
+.page{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
+.hot{position:absolute;z-index:20;background:transparent;border:0;padding:0;cursor:pointer}
+.hot:focus-visible{outline:3px solid #ff1493;outline-offset:2px;border-radius:8px}
+#loginInput{position:absolute;z-index:30;left:36.2%;top:42.1%;width:17.2%;height:9.4%;border:0;background:transparent;outline:none;text-align:center;color:#ff4ca0;font:700 clamp(16px,2.2vw,28px) Arial;letter-spacing:2px}
+.login-error{position:absolute;z-index:30;left:34%;top:53%;width:30%;text-align:center;color:#ff1493;font-weight:700;font-size:clamp(12px,1.8vw,22px);opacity:0;transition:.2s}.login-error.show{opacity:1}
+.nav-home{left:5%;top:0;width:14%;height:6%}.nav-about{left:29%;top:0;width:14%;height:6%}.nav-us{left:47%;top:0;width:12%;height:6%}.nav-test{left:63%;top:0;width:12%;height:6%}.nav-when{left:79%;top:0;width:17%;height:6%}
+.main-short,.main-back{left:50%;top:15.8%;width:14%;height:4.8%}
+.about-envelope{position:absolute;z-index:25;width:23%;height:12%;cursor:pointer}
+.env1{left:3.5%;top:40%}.env2{left:74%;top:40%}.env3{left:37%;top:45%}.env4{left:3.5%;top:53%}.env5{left:74%;top:53%}
+.back-about,.back-open{left:1.2%;bottom:2.5%;width:7%;height:7%}
+.start-test{left:42%;top:80%;width:22%;height:8%}
+.test-back{left:44%;top:0;width:12%;height:7%}
+.test-overlay{position:absolute;inset:0;z-index:7}.test-cover{position:absolute;left:33.5%;top:43%;width:54.5%;height:49%;background:#ffd9e7}
+.test-counter{position:absolute;left:51%;top:44.2%;width:43%;height:4.2%;background:#d83c8d;color:#fff;display:flex;align-items:center;padding-left:2%;font-family:'Courier New',monospace;font-weight:900;font-size:clamp(16px,2.3vw,30px)}
+.test-card{position:absolute;left:51%;top:48.3%;width:43%;min-height:14.5%;background:#ffe3ed;border:6px solid #d83c8d;box-shadow:5px 5px 0 #c53b83;padding:1.5% 3%;font-family:'Courier New',monospace;font-weight:900;font-size:clamp(12px,1.55vw,22px);line-height:1.35;text-align:center;display:flex;align-items:center;justify-content:center}
+.option-box{position:absolute;left:51%;width:4.3%;aspect-ratio:1;border:4px solid #111;background:#ffe8ef;z-index:25;cursor:pointer}.option-box.sel{background:#ff168e;border-color:#ff168e}
+.option-label{position:absolute;left:57%;width:36%;z-index:25;font-family:'Courier New',monospace;font-weight:900;font-size:clamp(12px,1.55vw,22px);line-height:1.15;cursor:pointer}
+.obb-a{top:69.4%}.obb-b{top:75.3%}.obb-c{top:81.2%}
+.test-next-overlay{position:absolute;left:82%;top:79%;width:15%;height:12%;z-index:30;cursor:pointer;background:transparent;border:0}
+.final{position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(255,215,230,.96);text-align:center;padding:8%;font-family:'Courier New',monospace;font-weight:900;color:#c72d7a}.final .box{max-width:700px;font-size:clamp(22px,4vw,44px);line-height:1.25}.final button{margin-top:28px;background:#d83c8d;color:white;border:0;padding:14px 26px;border-radius:8px;font-weight:900;font-size:18px;cursor:pointer}
+@media(max-width:600px){#app{width:100vw}#loginInput{font-size:16px}.test-card{font-size:12px;border-width:4px}.option-label{font-size:12px}}
+</style>
+</head>
+<body><div id="app"></div>
+<script>
+const Q = [["Если я говорю «я не хочу есть», насколько вероятно, что через час я скажу, что голодная?", "А) 10%", "Б) 50%", "В) 90%", "В"], ["Если мне что-то очень нравится, я скорее…", "А) Буду постоянно об этом говорить", "Б) Сделаю вид, что мне всё равно", "В) Никому об этом не расскажу", "А"], ["Если я устала, что во мне меняется первым?", "А) Настроение", "Б) Аппетит", "В) Желание разговаривать", "В"], ["Если я чего-то хочу, но боюсь попросить, я скорее…", "А) Намекну", "Б) Скажу прямо", "В) Вообще ничего не скажу", "А"], ["Если я обиделась, но не хочу говорить об этом, я скорее…", "А) Стану холоднее, но буду делать вид, что всё хорошо", "Б) Буду общаться как всегда", "В) Сразу скажу", "А"], ["Если я нервничаю перед чем-то важным, я скорее…", "А) Перестаю нормально спать", "Б) Начинаю всё перепроверять", "В) Стараюсь вообще об этом не думать", "В"], ["Когда я очень счастлива, я скорее…", "А) Начинаю много говорить", "Б) Становлюсь спокойнее", "В) Не могу перестать улыбаться", "В"], ["Если я не хочу что-то делать, меня легче всего убедить…", "А) Хорошей аргументацией", "Б) Лаской и заботой", "В) Шуткой", "Б"], ["Что я обычно делаю перед тем, как начать важное дело?", "А) Откладываю его", "Б) Всё перепроверяю", "В) Сразу начинаю", "А"], ["Что я делаю, когда пытаюсь скрыть, что расстроилась?", "А) Становлюсь слишком спокойной", "Б) Начинаю улыбаться и шутить", "В) Просто молчу", "В"], ["Как я обычно реагирую на неловкую ситуацию?", "А) Шучу", "Б) Молчу", "В) Хочу поскорее уйти", "А"], ["Если я внезапно замолчала во время разговора, скорее всего…", "А) Я обиделась", "Б) Я что-то обдумываю", "В) Я просто устала", "А"], ["Если я говорю «всё нормально», что это означает?", "А) Всё нормально", "Б) Всё хорошо", "В) Всё плохо", "В"], ["Что мне сложнее всего сделать после ссоры?", "А) Написать первой", "Б) Признать, что я была неправа", "В) Перестать думать о ситуации", "Б"], ["Если я чего-то сильно жду, я скорее…", "А) Постоянно проверяю время", "Б) Стараюсь отвлечься", "В) Представляю, как всё произойдёт", "В"], ["Как я реагирую, когда планы внезапно меняются?", "А) Спокойно перестраиваюсь", "Б) Меня это раздражает", "В) Сначала паникую, потом привыкаю", "Б"], ["Если мне нужно выбрать подарок человеку, я скорее…", "А) Буду искать идеальный вариант", "Б) Выберу что-нибудь практичное", "В) Придумаю что-нибудь личное", "А"], ["Что меня может обидеть сильнее всего?", "А) Равнодушие", "Б) Резкие слова", "В) Когда меня не слышат", "А"], ["Что для меня хуже?", "А) Когда человек врёт", "Б) Когда человек скрывает правду", "В) Когда человек делает вид, что ему всё равно", "А"], ["Что мне труднее всего сказать человеку, который мне дорог?", "А) «Мне больно»", "Б) «Мне тебя не хватает»", "В) «Мне нужна твоя помощь»", "В"], ["Когда я действительно доверяю человеку, я…", "А) Рассказываю ему практически всё", "Б) Перестаю контролировать каждую мелочь", "В) Не боюсь показывать слабость", "В"], ["Что меня быстрее всего успокоит после плохого дня?", "А) Разговор", "Б) Объятия", "В) Время наедине с собой", "Б"], ["Что заставляет меня чувствовать себя особенно любимой?", "А) Когда меня слушают", "Б) Когда обо мне заботятся без просьб", "В) Когда мне говорят о своих чувствах", "Б"], ["Что я скорее замечу: большой подарок или маленькую деталь, которую человек запомнил обо мне?", "А) Большой подарок", "Б) Маленькую деталь", "В) Зависит от ситуации", "Б"], ["Если я переживаю из-за чего-то, что мне нужно от близкого человека?", "А) Совет", "Б) Поддержка", "В) Решение проблемы", "В"], ["Как я понимаю, что человек действительно меня любит?", "А) По его словам", "Б) По его поступкам", "В) По тому, как он ведёт себя со мной в мелочах", "В"], ["Если я говорю «мне не холодно», что вероятнее всего произойдёт через некоторое время?", "А) Мне действительно не станет холодно", "Б) Я всё-таки замёрзну", "В) Я начну жаловаться на холод", "Б"], ["Если я говорю «я не обиделась», что это может означать?", "А) Я не обиделась", "Б) Я обиделась, но не хочу говорить", "В) Я уже почти перестала обижаться", "Б"], ["Если я начинаю рассказывать одну историю и внезапно ухожу в сторону, я…", "А) Забыла, о чём говорила", "Б) Просто вспомнила ещё одну историю", "В) Проверяю твоё внимание", "Б"], ["Как я могу вести себя в одной и той же ситуации?", "А) Всегда одинаково", "Б) По-разному — всё зависит от моего настроения", "В) Обычно противоположно тому, чего от меня ожидают", "Б"], ["Что лучше всего описывает моё настроение?", "А) Его довольно легко предсказать", "Б) Оно часто меняется", "В) Оно почти никогда не меняется", "Б"], ["Я говорю: «Ничего». Перевод с моего языка:", "А) Ничего", "Б) Сейчас лучше не продолжать этот разговор", "В) Конечно же, это значит совсем не «ничего»", "В"], ["Если я говорю «мне всё равно», скорее всего…", "А) Мне действительно всё равно", "Б) Мне не всё равно, просто я не хочу это показывать", "В) Я ещё не определилась", "Б"], ["Если я рассказываю тебе какую-то мелочь, которая произошла за день, это скорее значит, что…", "А) Мне просто нечем заняться", "Б) Мне хочется поделиться именно с тобой", "В) Я хочу услышать твоё мнение", "Б"], ["Если мне хочется внимания, но я не хочу просить его напрямую, я скорее…", "А) Стану сама чаще писать", "Б) Начну намекать", "В) Сделаю вид, что мне вообще не нужно внимание", "Б"], ["Если мы долго не виделись, что мне важнее всего в нашей встрече?", "А) Чтобы мы куда-нибудь сходили", "Б) Просто побыть рядом с тобой", "В) Чтобы мы много разговаривали", "Б"], ["Если я рассказываю тебе о своей проблеме, чего я чаще всего хочу в первую очередь?", "А) Чтобы ты решил проблему", "Б) Чтобы ты просто выслушал меня", "В) Чтобы ты меня отвлёк", "А"], ["Если я говорю, что «ничего не хочу», но ты знаешь, что я устала, что мне скорее всего нужно?", "А) Чтобы меня оставили одну", "Б) Забота и внимание без лишних вопросов", "В) Чтобы меня рассмешили", "Б"], ["Если я получаю от тебя неожиданный подарок или сюрприз, что меня тронет сильнее всего?", "А) Сам факт подарка", "Б) То, что ты запомнил какую-то мелочь обо мне", "В) Его стоимость и масштаб", "Б"], ["Если я вдруг начинаю говорить «ладно, всё», скорее всего…", "А) Я действительно закончила разговор", "Б) Я устала объяснять, жду понимание", "В) Я просто хочу сменить тему", "Б"], ["Что для меня важнее всего в отношениях?", "А) Постоянно проводить всё свободное время вместе", "Б) Чувствовать, что меня любят и выбирают даже в мелочах", "В) Никогда не ссориться", "Б"], ["Если я получила хорошую новость, кому мне скорее всего захочется рассказать об этом первой?", "А) Тебе", "Б) Подруге", "В) Я вообще никому сразу не расскажу", "А"], ["Если мне что-то приснилось и сон был странным, я скорее…", "А) Забуду о нём через пять минут", "Б) Буду весь день думать, что он значит", "В) Расскажу тебе и буду обсуждать его", "В"], ["Если ты заметишь, что я стала отвечать короче обычного, это скорее значит, что…", "А) Я просто занята", "Б) Что-то произошло и меня это задело", "В) Я просто устала от общения", "Б"], ["Если я долго выбираю, что надеть, скорее всего…", "А) Я не знаю, чего хочу", "Б) Я хочу, чтобы всё выглядело именно так, как я придумала", "В) Я в итоге надену первое, что увидела", "Б"], ["Если я говорю «потом расскажу», скорее всего…", "А) Я действительно забуду", "Б) Сейчас не подходящий момент, но я хочу рассказать", "В) Я передумала рассказывать", "А"], ["Если я что-то очень хочу купить, но сомневаюсь, я скорее…", "А) Куплю сразу", "Б) Буду долго думать, нужно ли мне это", "В) Попрошу тебя решить за меня", "Б"], ["Если я не могу уснуть, что вероятнее всего происходит у меня в голове?", "А) Ни о чем не думаю", "Б) Я начинаю думать обо всём подряд", "В) Я думаю только о том, что произошло за день", "Б"], ["Если я сказала «мне всё равно, выбирай сам», что я могу сделать через пять минут?", "А) Действительно соглашусь с твоим выбором", "Б) Вдруг предложу свой вариант", "В) Спрошу, почему ты выбрал именно это", "Б"], ["Если мне хочется плакать, но я стараюсь держаться, я скорее…", "А) Стану молчаливой", "Б) Начну очень много шутить", "В) Постараюсь сделать вид, что всё нормально", "В"]];
+const app=document.getElementById('app');
+let state={page:'login',envelope:0,q:0,selected:null,score:0};
+
+function img(n){return `<img class="page" src="assets/page-${String(n).padStart(2,'0')}.webp" alt="">`;}
+function screen(cls,inner){return `<section class="screen active ${cls}">${inner}</section>`;}
+function nav(){return `
+<button class="hot nav-home" onclick="go('home')" aria-label="Главная"></button>
+<button class="hot nav-about" onclick="go('about')" aria-label="О тебе"></button>
+<button class="hot nav-us" onclick="go('us')" aria-label="Мы"></button>
+<button class="hot nav-test" onclick="go('testIntro')" aria-label="Тест"></button>
+<button class="hot nav-when" onclick="go('when')" aria-label="Когда"></button>`;}
+
+function render(){
+ let s='';
+ if(state.page==='login'){
+  s=screen('login',img(1)+`<input id="loginInput" inputmode="numeric" maxlength="6" autocomplete="off" aria-label="Код"><div id="err" class="login-error">Неправильная дата</div>`);
+ }else if(state.page==='home'){
+  s=screen('home',img(2)+nav()+`<button class="hot main-short" onclick="go('homeShort')" aria-label="Сократить"></button>`);
+ }else if(state.page==='homeShort'){
+  s=screen('home-short',img(3)+nav()+`<button class="hot main-back" onclick="go('home')" aria-label="Обратно"></button>`);
+ }else if(state.page==='about'){
+  s=screen('about',img(4)+nav()+`
+   <button class="about-envelope env1" onclick="openEnvelope(1)" aria-label="Конверт 1"></button>
+   <button class="about-envelope env2" onclick="openEnvelope(2)" aria-label="Конверт 2"></button>
+   <button class="about-envelope env3" onclick="openEnvelope(3)" aria-label="Конверт 3"></button>
+   <button class="about-envelope env4" onclick="openEnvelope(4)" aria-label="Конверт 4"></button>
+   <button class="about-envelope env5" onclick="openEnvelope(5)" aria-label="Конверт 5"></button>`);
+ }else if(state.page==='envClosed'){
+  s=screen('envclosed',img(5+2*(state.envelope-1))+`<button class="hot" style="left:30%;top:30%;width:40%;height:45%" onclick="openLetter(${state.envelope})" aria-label="Открыть"></button><button class="hot back-about" onclick="go('about')" aria-label="Назад"></button>`);
+ }else if(state.page==='letter'){
+  const page=6+2*(state.envelope-1);
+  s=screen('letter',img(page)+`<button class="hot back-open" onclick="go('about')" aria-label="Назад"></button>`);
+ }else if(state.page==='us'){
+  s=screen('us',img(15)+nav());
+ }else if(state.page==='when'){
+  s=screen('when',img(18)+nav());
+ }else if(state.page==='testIntro'){
+  s=screen('test-intro',img(16)+nav()+`<button class="hot start-test" onclick="startTest()" aria-label="Начать тест"></button>`);
+ }else if(state.page==='test'){
+  s=renderTest();
+ }
+ app.innerHTML=s;
+ if(state.page==='login'){
+  const inp=document.getElementById('loginInput');
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+  inp.focus();
+ }
+}
+function login(){
+ const v=document.getElementById('loginInput').value.trim(),err=document.getElementById('err');
+ if(v==='130425')go('home');else err.classList.add('show');
+}
+function go(p){state.page=p;state.selected=null;render();window.scrollTo(0,0);}
+function openEnvelope(n){state.envelope=n;state.page='envClosed';render();setTimeout(()=>openLetter(n),650);}
+function openLetter(n){state.envelope=n;state.page='letter';render();}
+function startTest(){state.q=0;state.selected=null;state.score=0;state.page='test';render();}
+function escapeHtml(x){return x.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+function renderTest(){
+ const [question,a,b,c,correct]=Q[state.q],picked=state.selected;
+ return screen('test',img(17)+nav()+`
+  <div class="test-overlay">
+   <div class="test-cover"></div>
+   <div class="test-counter">${state.q+1}/50</div>
+   <div class="test-card">${escapeHtml(question)}</div>
+   <div class="option-box ${picked==='А'?'sel':''}" style="top:69.4%" onclick="pick('А')"></div>
+   <div class="option-box ${picked==='Б'?'sel':''}" style="top:75.3%" onclick="pick('Б')"></div>
+   <div class="option-box ${picked==='В'?'sel':''}" style="top:81.2%" onclick="pick('В')"></div>
+   <div class="option-label obb-a" onclick="pick('А')">${escapeHtml(a)}</div>
+   <div class="option-label obb-b" onclick="pick('Б')">${escapeHtml(b)}</div>
+   <div class="option-label obb-c" onclick="pick('В')">${escapeHtml(c)}</div>
+   ${state.q>0?`<button class="hot test-back" onclick="prevQuestion()">← назад</button>`:''}
+   <button class="test-next-overlay" ${picked?'':'disabled'} onclick="nextQuestion()" aria-label="Следующий вопрос"></button>
+  </div>`);
+}
+function pick(v){state.selected=v;render();}
+function nextQuestion(){
+ if(!state.selected)return;
+ if(state.selected===Q[state.q][4])state.score++;
+ if(state.q===49){showFinal();return;}
+ state.q++;state.selected=null;render();window.scrollTo(0,0);
+}
+function prevQuestion(){if(state.q>0){state.q--;state.selected=null;render();window.scrollTo(0,0);}}
+function showFinal(){
+ app.innerHTML=screen('final',img(17)+`<div class="final"><div class="box">Тест закончен 💗<br><br>Ты набрал ${state.score} из 50.<br><br>Спасибо, что знаешь меня всё лучше.<br><br>Я люблю тебя.<br><button onclick="go('home')">На главную</button></div></div>`);
+}
+render();
+</script></body></html>
