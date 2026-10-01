@@ -403,27 +403,115 @@ input{
 }
 
 /* ---------------------------------
-   ТЕСТ — ОТВЕТЫ
+   НОВОЕ ОКНО ТЕСТА
 --------------------------------- */
 
-.test-option{
+.test-box{
   position:absolute;
 
-  z-index:200;
+  z-index:250;
 
-  left:25%;
-  width:55%;
+  /*
+    Окно находится снизу справа,
+    но ближе к центру.
+  */
+
+  right:7%;
+  bottom:8%;
+
+  width:47%;
+
+  min-height:43%;
+
+  padding:3% 3.5%;
+
+  background:rgba(255,255,255,.96);
+
+  border-radius:22px;
+
+  box-shadow:
+    0 8px 30px rgba(0,0,0,.28);
+
+  color:#000;
+
+  line-height:1.2;
+
+  pointer-events:auto;
+
+  font-family:Arial,sans-serif;
+
+  overflow:hidden;
+}
+
+
+/* НОМЕР ВОПРОСА */
+
+.test-number{
+  font-size:clamp(13px,1.5vw,21px);
+
+  color:#e91e91;
+
+  font-weight:bold;
+
+  margin-bottom:10px;
+
+  line-height:1.2;
+}
+
+
+/* ВОПРОС */
+
+.test-question{
+  font-size:clamp(15px,2vw,28px);
+
+  font-weight:bold;
+
+  line-height:1.25;
+
+  margin-bottom:16px;
+
+  max-height:30%;
+
+  overflow:auto;
+
+  -webkit-overflow-scrolling:touch;
+}
+
+
+/* ВАРИАНТ */
+
+.test-answer{
+  position:relative;
+
+  display:flex;
+
+  align-items:flex-start;
+
+  width:100%;
+
+  min-height:38px;
+
+  margin-bottom:8px;
+
+  padding:8px 10px;
 
   border:0;
 
-  background:transparent;
+  border-radius:12px;
+
+  background:rgba(245,245,245,.96);
+
+  color:#000;
+
+  text-align:left;
 
   cursor:pointer;
 
   pointer-events:auto;
 
-  padding:0;
-  margin:0;
+  font-size:clamp(13px,1.45vw,20px);
+
+  line-height:1.2;
 
   -webkit-appearance:none;
   appearance:none;
@@ -433,61 +521,123 @@ input{
   user-select:none;
   -webkit-user-select:none;
 
-  -webkit-tap-highlight-color:transparent;
+  transition:
+    background .15s,
+    transform .1s;
 }
 
-.test-option:focus{
+.test-answer:focus{
   outline:none;
 }
 
-.test-option:active{
-  background:rgba(255,105,180,0.08);
+
+/* КРУЖОК */
+
+.test-radio{
+  flex:none;
+
+  width:21px;
+  height:21px;
+
+  margin-right:10px;
+
+  margin-top:1px;
+
+  border:2px solid #000;
+
+  border-radius:50%;
+
+  background:#fff;
+
+  position:relative;
 }
 
-.option1{
-  top:64%;
-  height:9%;
+
+/* ТОЧКА ВНУТРИ КРУЖКА */
+
+.test-answer.selected .test-radio{
+  border-color:#e91e91;
 }
 
-.option2{
-  top:74%;
-  height:9%;
+.test-answer.selected .test-radio::after{
+  content:"";
+
+  position:absolute;
+
+  left:4px;
+  top:4px;
+
+  width:9px;
+  height:9px;
+
+  border-radius:50%;
+
+  background:#e91e91;
 }
 
-.option3{
-  top:84%;
-  height:9%;
+
+/* ВЫБРАННЫЙ ОТВЕТ */
+
+.test-answer.selected{
+  background:rgba(255,139,199,.38);
 }
+
+
+/* НАЖАТИЕ */
+
+.test-answer:active{
+  transform:scale(.98);
+}
+
+
+/* ТЕКСТ ВАРИАНТА */
+
+.test-answer-text{
+  flex:1;
+
+  line-height:1.25;
+}
+
 
 /* ---------------------------------
    КНОПКА ДАЛЬШЕ
 --------------------------------- */
 
 .test-next{
-  position:absolute;
+  display:block;
 
-  z-index:210;
+  width:100%;
 
-  right:2%;
+  margin-top:10px;
 
-  bottom:4%;
-
-  width:16%;
-  height:18%;
+  padding:10px 18px;
 
   border:0;
 
-  background:rgba(255,255,255,0.001);
+  border-radius:12px;
+
+  background:#ff8bc7;
+
+  color:#000;
+
+  font-size:clamp(14px,1.5vw,21px);
+
+  font-weight:bold;
 
   cursor:pointer;
 
   pointer-events:auto;
 
-  padding:0;
-  margin:0;
-
   touch-action:manipulation;
+
+  -webkit-appearance:none;
+  appearance:none;
 }
+
+.test-next:active{
+  transform:scale(.97);
+}
+
 
 /* ---------------------------------
    РЕЗУЛЬТАТ
@@ -540,6 +690,7 @@ input{
   touch-action:manipulation;
 }
 
+
 /* ---------------------------------
    МОБИЛЬНЫЙ ТЕЛЕФОН
 --------------------------------- */
@@ -554,6 +705,70 @@ input{
   .stage{
     max-width:100vw;
     max-height:100dvh;
+  }
+
+  .test-box{
+
+    right:5%;
+
+    bottom:7%;
+
+    width:58%;
+
+    min-height:45%;
+
+    padding:3%;
+
+    border-radius:17px;
+  }
+
+  .test-number{
+    font-size:clamp(12px,2.7vw,18px);
+
+    margin-bottom:7px;
+  }
+
+  .test-question{
+    font-size:clamp(12px,3vw,19px);
+
+    margin-bottom:9px;
+  }
+
+  .test-answer{
+
+    min-height:31px;
+
+    margin-bottom:5px;
+
+    padding:6px 7px;
+
+    font-size:clamp(10px,2.5vw,16px);
+  }
+
+  .test-radio{
+
+    width:17px;
+    height:17px;
+
+    margin-right:7px;
+  }
+
+  .test-answer.selected .test-radio::after{
+
+    left:3px;
+    top:3px;
+
+    width:7px;
+    height:7px;
+  }
+
+  .test-next{
+
+    margin-top:6px;
+
+    padding:8px 12px;
+
+    font-size:clamp(11px,2.7vw,17px);
   }
 }
 </style>
@@ -1423,7 +1638,7 @@ function startTest(){
 
 
 /* =========================================================
-   ВЫБОР ОТВЕТА — ИСПРАВЛЕНО
+   ВЫБОР ОТВЕТА
 ========================================================= */
 
 function selectAnswer(index){
@@ -1450,31 +1665,22 @@ function selectAnswer(index){
 
 
   /*
-    НЕ вызываем render() здесь.
+    Не перерисовываем весь тест после
+    нажатия.
 
-    Это важно для телефона:
-    раньше после касания кнопка сразу
-    уничтожалась и создавалась заново.
-
-    Теперь нажатие стабильно сохраняется.
+    Поэтому на телефоне нажатие
+    работает стабильно.
   */
 
-  const options =
-    document.querySelectorAll(".test-option");
+  const answers =
+    document.querySelectorAll(".test-answer");
 
-  options.forEach(function(button, i){
+  answers.forEach(function(answer, i){
 
-    if(i === index){
-
-      button.style.background =
-        "rgba(255,105,180,0.12)";
-
-    }else{
-
-      button.style.background =
-        "transparent";
-
-    }
+    answer.classList.toggle(
+      "selected",
+      i === index
+    );
 
   });
 }
@@ -1491,7 +1697,6 @@ function nextQuestion(){
   }
 
   if(state.selected === null){
-
     return;
   }
 
@@ -1504,6 +1709,10 @@ function nextQuestion(){
   state.answers[state.q] =
     state.selected;
 
+
+  /*
+    ЕСЛИ ЭТО ПОСЛЕДНИЙ ВОПРОС
+  */
 
   if(state.q === Q.length - 1){
 
@@ -1534,21 +1743,29 @@ function nextQuestion(){
   }
 
 
+  /*
+    ПЕРЕХОД К СЛЕДУЮЩЕМУ ВОПРОСУ
+  */
+
   state.q++;
 
 
+  /*
+    Если на следующем вопросе уже
+    был сохранён ответ — восстанавливаем его.
+  */
+
   if(
-    state.answers[state.q] === null ||
-    state.answers[state.q] === undefined
+    state.answers[state.q] !== null &&
+    state.answers[state.q] !== undefined
   ){
-
-    state.selected = null;
-
-  }else{
 
     state.selected =
       state.answers[state.q];
 
+  }else{
+
+    state.selected = null;
   }
 
 
@@ -1911,40 +2128,117 @@ function render(){
       Q[state.q];
 
 
+    /*
+      Если для текущего вопроса уже
+      был сохранён ответ — показываем его.
+    */
+
+    if(
+      Array.isArray(state.answers) &&
+      state.answers[state.q] !== null &&
+      state.answers[state.q] !== undefined
+    ){
+
+      state.selected =
+        state.answers[state.q];
+
+    }
+
+
     s = screen(
+
+      /*
+        Оригинальная картинка остаётся
+        фоном.
+      */
 
       img(17) +
 
       nav() +
 
+      /*
+        НОВОЕ НАСТОЯЩЕЕ ОКНО ТЕСТА
+      */
+
       `
-        <button
-          type="button"
-          class="test-option option1"
-          onclick="selectAnswer(0)"
-          aria-label="${question[1][0]}">
-        </button>
+        <div class="test-box">
 
-        <button
-          type="button"
-          class="test-option option2"
-          onclick="selectAnswer(1)"
-          aria-label="${question[1][1]}">
-        </button>
+          <div class="test-number">
+            Вопрос ${state.q + 1} из ${Q.length}
+          </div>
 
-        <button
-          type="button"
-          class="test-option option3"
-          onclick="selectAnswer(2)"
-          aria-label="${question[1][2]}">
-        </button>
 
-        <button
-          type="button"
-          class="test-next"
-          onclick="nextQuestion()"
-          aria-label="Следующий вопрос">
-        </button>
+          <div class="test-question">
+            ${question[0]}
+          </div>
+
+
+          <button
+            type="button"
+            class="test-answer ${
+              state.selected === 0
+                ? "selected"
+                : ""
+            }"
+            onclick="selectAnswer(0)"
+          >
+
+            <span class="test-radio"></span>
+
+            <span class="test-answer-text">
+              ${question[1][0]}
+            </span>
+
+          </button>
+
+
+          <button
+            type="button"
+            class="test-answer ${
+              state.selected === 1
+                ? "selected"
+                : ""
+            }"
+            onclick="selectAnswer(1)"
+          >
+
+            <span class="test-radio"></span>
+
+            <span class="test-answer-text">
+              ${question[1][1]}
+            </span>
+
+          </button>
+
+
+          <button
+            type="button"
+            class="test-answer ${
+              state.selected === 2
+                ? "selected"
+                : ""
+            }"
+            onclick="selectAnswer(2)"
+          >
+
+            <span class="test-radio"></span>
+
+            <span class="test-answer-text">
+              ${question[1][2]}
+            </span>
+
+          </button>
+
+
+          <button
+            type="button"
+            class="test-next"
+            onclick="nextQuestion()"
+          >
+            Дальше →
+          </button>
+
+        </div>
       `
 
     );
@@ -2029,29 +2323,6 @@ function render(){
   app.innerHTML = s;
 
   fitStage();
-
-
-  /* ---------------------------------
-     ВОССТАНОВЛЕНИЕ ВЫБРАННОГО ОТВЕТА
-  --------------------------------- */
-
-  if(state.page === "test" && state.selected !== null){
-
-    const options =
-      document.querySelectorAll(".test-option");
-
-    options.forEach(function(button, i){
-
-      if(i === state.selected){
-
-        button.style.background =
-          "rgba(255,105,180,0.12)";
-
-      }
-
-    });
-
-  }
 
 
   /* ---------------------------------
