@@ -52,13 +52,17 @@ input{
   overflow:hidden;
 }
 
+/*
+  ВАЖНО:
+  stage больше НЕ имеет принудительного 4:3 или 16:9.
+  Его размер задаётся по настоящему размеру
+  текущей картинки.
+*/
 .stage{
   position:relative;
 
-  width:min(100vw,1200px);
-  max-width:100vw;
-  max-height:100vh;
-  max-height:100dvh;
+  width:auto;
+  height:auto;
 
   overflow:hidden;
 
@@ -66,7 +70,7 @@ input{
 
   flex:none;
 
-  aspect-ratio:4 / 3;
+  line-height:0;
 }
 
 .page{
@@ -80,7 +84,11 @@ input{
 
   display:block;
 
-  object-fit:fill;
+  /*
+    НЕЛЬЗЯ fill:
+    fill растягивает картинку.
+  */
+  object-fit:contain;
 
   pointer-events:none;
 
@@ -88,6 +96,10 @@ input{
   -webkit-user-select:none;
   -webkit-user-drag:none;
 }
+
+/* ---------------------------------
+   ОБЩИЕ КНОПКИ
+--------------------------------- */
 
 .hot{
   position:absolute;
@@ -103,6 +115,8 @@ input{
 
   -webkit-appearance:none;
   appearance:none;
+
+  pointer-events:auto;
 }
 
 .hot:focus{
@@ -122,9 +136,11 @@ input{
   width:100%;
   height:12%;
 
-  z-index:40;
+  z-index:100;
 
   display:flex;
+
+  pointer-events:auto;
 }
 
 .nav button{
@@ -139,6 +155,11 @@ input{
   margin:0;
 
   cursor:pointer;
+
+  pointer-events:auto;
+
+  -webkit-appearance:none;
+  appearance:none;
 }
 
 /* ---------------------------------
@@ -148,7 +169,7 @@ input{
 .login-input{
   position:absolute;
 
-  z-index:50;
+  z-index:150;
 
   left:37.5%;
   top:43.2%;
@@ -173,6 +194,8 @@ input{
 
   -webkit-appearance:none;
   appearance:none;
+
+  pointer-events:auto;
 }
 
 .login-input:focus{
@@ -182,7 +205,7 @@ input{
 .login-heart{
   position:absolute;
 
-  z-index:55;
+  z-index:155;
 
   left:55.5%;
   top:43%;
@@ -196,12 +219,17 @@ input{
   cursor:pointer;
 
   padding:0;
+
+  pointer-events:auto;
+
+  -webkit-appearance:none;
+  appearance:none;
 }
 
 .login-error{
   position:absolute;
 
-  z-index:60;
+  z-index:160;
 
   left:50%;
   top:57%;
@@ -215,6 +243,7 @@ input{
   font-weight:bold;
 
   opacity:0;
+
   pointer-events:none;
 
   transition:.2s;
@@ -231,18 +260,24 @@ input{
 .home-short-hot{
   position:absolute;
 
-  z-index:40;
+  z-index:90;
 
-  left:45%;
-  top:48%;
+  left:42%;
+  top:46%;
 
-  width:14%;
-  height:9%;
+  width:22%;
+  height:14%;
 
   border:0;
-  background:transparent;
+
+  background:rgba(255,255,255,0.001);
 
   cursor:pointer;
+
+  pointer-events:auto;
+
+  padding:0;
+  margin:0;
 }
 
 /* ---------------------------------
@@ -252,49 +287,54 @@ input{
 .envelope-zone{
   position:absolute;
 
-  z-index:40;
+  z-index:90;
 
   border:0;
-  background:transparent;
+
+  background:rgba(255,255,255,0.001);
 
   cursor:pointer;
 
   padding:0;
+
+  margin:0;
+
+  pointer-events:auto;
 }
 
 .env1{
   left:2%;
-  top:45%;
-  width:25%;
-  height:25%;
+  top:43%;
+  width:27%;
+  height:29%;
 }
 
 .env2{
-  left:35%;
-  top:42%;
-  width:30%;
-  height:27%;
+  left:34%;
+  top:40%;
+  width:32%;
+  height:31%;
 }
 
 .env3{
-  left:72%;
-  top:45%;
-  width:25%;
-  height:25%;
+  left:70%;
+  top:43%;
+  width:28%;
+  height:29%;
 }
 
 .env4{
   left:2%;
-  top:68%;
-  width:25%;
-  height:25%;
+  top:66%;
+  width:27%;
+  height:30%;
 }
 
 .env5{
-  left:72%;
-  top:68%;
-  width:25%;
-  height:25%;
+  left:70%;
+  top:66%;
+  width:28%;
+  height:30%;
 }
 
 /* ---------------------------------
@@ -304,7 +344,7 @@ input{
 .zoom-envelope{
   position:absolute;
 
-  z-index:50;
+  z-index:120;
 
   left:0;
   top:0;
@@ -319,100 +359,169 @@ input{
   background:transparent;
 
   cursor:pointer;
+
+  pointer-events:auto;
 }
 
 .back-zone{
   position:absolute;
 
-  z-index:70;
+  z-index:130;
 
   left:0;
   bottom:0;
 
-  width:20%;
-  height:22%;
+  width:25%;
+  height:25%;
 
   border:0;
-  background:transparent;
+
+  background:rgba(255,255,255,0.001);
 
   cursor:pointer;
+
+  pointer-events:auto;
 }
 
 /* ---------------------------------
-   ТЕСТ
+   ТЕСТ — СТАРТ
 --------------------------------- */
 
 .test-start{
   position:absolute;
 
-  z-index:45;
+  z-index:110;
 
-  left:47%;
-  top:67%;
+  left:42%;
+  top:63%;
 
-  width:25%;
-  height:14%;
+  width:35%;
+  height:20%;
 
   border:0;
-  background:transparent;
+
+  background:rgba(255,255,255,0.001);
 
   cursor:pointer;
+
+  pointer-events:auto;
+
+  padding:0;
+  margin:0;
 }
+
+/* ---------------------------------
+   ТЕСТ — ОТВЕТЫ
+--------------------------------- */
+
+/*
+  Раньше зоны были слишком узкими:
+  left:41%;
+  width:28%.
+
+  На телефоне из-за этого часть текста
+  фактически не попадала в кнопку.
+
+  Теперь зоны шире и рассчитаны
+  именно под нажатие пальцем.
+*/
 
 .test-option{
   position:absolute;
 
-  z-index:50;
+  z-index:200;
 
-  left:41%;
-  width:28%;
+  left:25%;
+
+  width:55%;
 
   border:0;
-  background:transparent;
+
+  background:rgba(255,255,255,0.001);
 
   cursor:pointer;
+
+  pointer-events:auto;
+
+  padding:0;
+  margin:0;
+
+  -webkit-appearance:none;
+  appearance:none;
+
+  touch-action:manipulation;
 }
 
+.test-option:focus{
+  outline:none;
+}
+
+.test-option:active{
+  background:rgba(255,105,180,0.08);
+}
+
+/*
+  Три отдельные зоны.
+  Между ними есть небольшой промежуток,
+  поэтому они не перекрываются.
+*/
+
 .option1{
-  top:67%;
-  height:7%;
+  top:64%;
+  height:9%;
 }
 
 .option2{
-  top:75%;
-  height:7%;
+  top:74%;
+  height:9%;
 }
 
 .option3{
-  top:83%;
-  height:7%;
+  top:84%;
+  height:9%;
 }
+
+/* ---------------------------------
+   КНОПКА ДАЛЬШЕ
+--------------------------------- */
 
 .test-next{
   position:absolute;
 
-  z-index:60;
+  z-index:210;
 
-  right:4%;
-  bottom:7%;
+  right:2%;
 
-  width:12%;
-  height:15%;
+  bottom:4%;
+
+  width:16%;
+  height:18%;
 
   border:0;
-  background:transparent;
+
+  background:rgba(255,255,255,0.001);
 
   cursor:pointer;
+
+  pointer-events:auto;
+
+  padding:0;
+  margin:0;
 }
+
+/* ---------------------------------
+   РЕЗУЛЬТАТ
+--------------------------------- */
 
 .test-result{
   position:absolute;
 
-  z-index:80;
+  z-index:300;
 
   inset:0;
 
   display:flex;
+
   align-items:center;
   justify-content:center;
 
@@ -425,7 +534,12 @@ input{
   color:#000;
 
   font-size:clamp(20px,4vw,55px);
+
   font-weight:bold;
+
+  line-height:1.2;
+
+  pointer-events:auto;
 }
 
 .test-result button{
@@ -440,10 +554,12 @@ input{
   font-size:clamp(16px,2vw,25px);
 
   cursor:pointer;
+
+  pointer-events:auto;
 }
 
 /* ---------------------------------
-   СОХРАНЕНИЕ ГОРИЗОНТАЛЬНОГО ХОЛСТА
+   МОБИЛЬНЫЙ ТЕЛЕФОН
 --------------------------------- */
 
 @media (orientation:portrait){
@@ -453,8 +569,13 @@ input{
     justify-content:center;
   }
 
+  /*
+    Горизонтальный дизайн НЕ превращаем
+    в вертикальный.
+  */
   .stage{
-    width:100vw;
+    max-width:100vw;
+    max-height:100dvh;
   }
 }
 </style>
@@ -474,11 +595,6 @@ const CODE = "130425";
 
 /*
   Пароль действует 24 часа.
-  После истечения этого времени потребуется
-  снова ввести код.
-
-  Прогресс теста хранится отдельно и НЕ удаляется
-  при истечении пароля.
 */
 const LOGIN_DURATION = 24 * 60 * 60 * 1000;
 
@@ -491,6 +607,7 @@ const STATE_KEY = "loveSiteState_v2";
 ========================================================= */
 
 const defaultState = {
+
   page:"home",
 
   envelope:0,
@@ -568,12 +685,10 @@ function loadState(){
       ...parsed
     };
 
-    /*
-      Защита от повреждённого массива ответов.
-    */
     if(!Array.isArray(state.answers)){
 
-      state.answers = [];
+      state.answers =
+        new Array(Q.length).fill(null);
 
     }
 
@@ -624,11 +739,9 @@ function isLoginValid(){
     if(Date.now() >= loginData.expires){
 
       /*
-        Удаляем ТОЛЬКО информацию о входе.
+        Удаляем только вход.
 
-        STATE_KEY не трогаем,
-        поэтому тест и весь его прогресс
-        остаются сохранёнными.
+        Прогресс теста остаётся.
       */
 
       localStorage.removeItem(LOGIN_KEY);
@@ -658,7 +771,8 @@ function saveLogin(){
     localStorage.setItem(
       LOGIN_KEY,
       JSON.stringify({
-        expires:Date.now() + LOGIN_DURATION
+        expires:
+          Date.now() + LOGIN_DURATION
       })
     );
 
@@ -964,10 +1078,11 @@ function screen(content){
 
 
 /* =========================================================
-   ПРОПОРЦИИ
+   ПОДГОНКА ХОЛСТА ПОД НАСТОЯЩУЮ
+   ПРОПОРЦИЮ КАРТИНКИ
 ========================================================= */
 
-function fixStageRatio(){
+function fitStage(){
 
   const stage =
     document.getElementById("stage");
@@ -979,33 +1094,84 @@ function fixStageRatio(){
 
   if(!page) return;
 
-  function setRatio(){
+
+  function resize(){
 
     if(
-      page.naturalWidth &&
-      page.naturalHeight
+      !page.naturalWidth ||
+      !page.naturalHeight
     ){
 
-      stage.style.aspectRatio =
-        page.naturalWidth +
-        " / " +
-        page.naturalHeight;
+      return;
     }
+
+
+    const imageRatio =
+      page.naturalWidth /
+      page.naturalHeight;
+
+
+    const viewportWidth =
+      window.innerWidth;
+
+
+    const viewportHeight =
+      window.innerHeight;
+
+
+    /*
+      Сначала пытаемся сделать картинку
+      максимально широкой.
+    */
+
+    let width =
+      viewportWidth;
+
+    let height =
+      width / imageRatio;
+
+
+    /*
+      Если по высоте не помещается —
+      уменьшаем и ширину, и высоту.
+
+      Поэтому картинка НИКОГДА
+      не растягивается.
+    */
+
+    if(height > viewportHeight){
+
+      height =
+        viewportHeight;
+
+      width =
+        height * imageRatio;
+    }
+
+
+    stage.style.width =
+      Math.floor(width) + "px";
+
+    stage.style.height =
+      Math.floor(height) + "px";
+
   }
+
 
   if(page.complete){
 
-    setRatio();
+    resize();
 
   }else{
 
     page.addEventListener(
       "load",
-      setRatio,
+      resize,
       {once:true}
     );
 
   }
+
 }
 
 
@@ -1062,23 +1228,20 @@ function login(){
 
   if(!input) return;
 
+
   const value =
     input.value.trim();
 
+
   if(value === CODE){
 
-    /*
-      Сначала сохраняем вход.
-    */
     saveLogin();
 
-    /*
-      ВАЖНО:
-      Если сохранённый state уже содержит
-      прогресс теста, мы его НЕ сбрасываем.
 
-      После повторного входа просто возвращаем
-      пользователя на главную.
+    /*
+      Пароль введён правильно.
+
+      Прогресс теста НЕ трогаем.
     */
 
     state.page = "home";
@@ -1104,6 +1267,7 @@ function login(){
     }
 
   }
+
 }
 
 
@@ -1202,10 +1366,10 @@ function chooseEnvelope(number){
 
   /*
     Первый клик:
-    закрытый конверт увеличивается.
+    увеличенный конверт.
 
     Второй клик:
-    открывается письмо.
+    открытое письмо.
   */
 
   if(state.envelope === number){
@@ -1220,9 +1384,11 @@ function chooseEnvelope(number){
     return;
   }
 
+
   state.envelope = number;
 
-  state.page = "envelopeZoom";
+  state.page =
+    "envelopeZoom";
 
   saveState();
 
@@ -1257,7 +1423,7 @@ function goTestIntro(){
 
 
 /* =========================================================
-   ЕСТЬ ЛИ СОХРАНЁННЫЙ ТЕСТ
+   ПРОВЕРКА ПРОГРЕССА
 ========================================================= */
 
 function hasTestProgress(){
@@ -1267,13 +1433,6 @@ function hasTestProgress(){
     return false;
   }
 
-  /*
-    Тест считается начатым, если:
-    - пользователь уже находится внутри теста;
-    - есть выбранный ответ;
-    - есть хотя бы один сохранённый ответ;
-    - текущий вопрос изменился.
-  */
 
   return (
     state.page === "test" ||
@@ -1281,7 +1440,9 @@ function hasTestProgress(){
     state.q > 0 ||
     state.selected !== null ||
     state.answers.some(
-      answer => answer !== null
+      answer =>
+        answer !== null &&
+        answer !== undefined
     )
   );
 }
@@ -1294,19 +1455,11 @@ function hasTestProgress(){
 function startTest(){
 
   /*
-    Если тест уже был начат,
-    НЕ сбрасываем его.
-
-    Кнопка «Начать тест» в этом случае
-    продолжает сохранённый тест.
+    Если тест уже начинался —
+    продолжаем его.
   */
 
   if(hasTestProgress()){
-
-    /*
-      Восстанавливаем выбранный ответ
-      для текущего вопроса.
-    */
 
     if(
       Array.isArray(state.answers) &&
@@ -1328,10 +1481,9 @@ function startTest(){
     return;
   }
 
+
   /*
-    Только если тест действительно
-    ещё ни разу не начинался —
-    создаём новый.
+    Новый тест.
   */
 
   state.q = 0;
@@ -1357,13 +1509,14 @@ function startTest(){
 
 function selectAnswer(index){
 
+  if(state.page !== "test"){
+
+    return;
+  }
+
+
   state.selected = index;
 
-  /*
-    Сразу записываем ответ.
-    Даже если пользователь обновит страницу
-    сразу после нажатия, ответ уже сохранён.
-  */
 
   if(!Array.isArray(state.answers)){
 
@@ -1371,9 +1524,17 @@ function selectAnswer(index){
       new Array(Q.length).fill(null);
   }
 
-  state.answers[state.q] = index;
+
+  state.answers[state.q] =
+    index;
+
+
+  /*
+    Сохраняем моментально.
+  */
 
   saveState();
+
 
   render();
 }
@@ -1385,18 +1546,15 @@ function selectAnswer(index){
 
 function nextQuestion(){
 
-  /*
-    Нельзя перейти дальше,
-    пока ответ не выбран.
-  */
-
   if(state.selected === null){
 
     return;
   }
 
+
   state.answers[state.q] =
     state.selected;
+
 
   /*
     Последний вопрос.
@@ -1405,6 +1563,7 @@ function nextQuestion(){
   if(state.q === Q.length - 1){
 
     state.score = 0;
+
 
     for(
       let i = 0;
@@ -1418,7 +1577,9 @@ function nextQuestion(){
 
         state.score++;
       }
+
     }
+
 
     state.page = "result";
 
@@ -1429,23 +1590,29 @@ function nextQuestion(){
     return;
   }
 
-  /*
-    Переходим к следующему вопросу.
-  */
 
   state.q++;
 
+
   /*
-    Восстанавливаем ранее выбранный
-    ответ, если пользователь вернулся
-    к этому вопросу.
+    Восстанавливаем ответ,
+    если он уже был выбран ранее.
   */
 
-  state.selected =
+  if(
     state.answers[state.q] === null ||
     state.answers[state.q] === undefined
-      ? null
-      : state.answers[state.q];
+  ){
+
+    state.selected = null;
+
+  }else{
+
+    state.selected =
+      state.answers[state.q];
+
+  }
+
 
   saveState();
 
@@ -1464,16 +1631,28 @@ function prevQuestion(){
     return;
   }
 
+
   state.answers[state.q] =
     state.selected;
 
+
   state.q--;
 
-  state.selected =
+
+  if(
     state.answers[state.q] === null ||
     state.answers[state.q] === undefined
-      ? null
-      : state.answers[state.q];
+  ){
+
+    state.selected = null;
+
+  }else{
+
+    state.selected =
+      state.answers[state.q];
+
+  }
+
 
   saveState();
 
@@ -1482,7 +1661,7 @@ function prevQuestion(){
 
 
 /* =========================================================
-   НАЧАТЬ ТЕСТ ЗАНОВО
+   НАЧАТЬ ЗАНОВО
 ========================================================= */
 
 function restartTest(){
@@ -1620,27 +1799,32 @@ function render(){
       `
         <button
           class="envelope-zone env1"
-          onclick="chooseEnvelope(1)">
+          onclick="chooseEnvelope(1)"
+          aria-label="Конверт 1">
         </button>
 
         <button
           class="envelope-zone env2"
-          onclick="chooseEnvelope(2)">
+          onclick="chooseEnvelope(2)"
+          aria-label="Конверт 2">
         </button>
 
         <button
           class="envelope-zone env3"
-          onclick="chooseEnvelope(3)">
+          onclick="chooseEnvelope(3)"
+          aria-label="Конверт 3">
         </button>
 
         <button
           class="envelope-zone env4"
-          onclick="chooseEnvelope(4)">
+          onclick="chooseEnvelope(4)"
+          aria-label="Конверт 4">
         </button>
 
         <button
           class="envelope-zone env5"
-          onclick="chooseEnvelope(5)">
+          onclick="chooseEnvelope(5)"
+          aria-label="Конверт 5">
         </button>
       `
 
@@ -1777,9 +1961,7 @@ function render(){
   else if(state.page === "test"){
 
     /*
-      Защита от ошибки,
-      если состояние каким-то образом
-      повреждено.
+      Защита от неправильного номера вопроса.
     */
 
     if(
@@ -1788,13 +1970,16 @@ function render(){
     ){
 
       state.q = 0;
+
+      state.selected = null;
+
+      saveState();
     }
+
 
     const question =
       Q[state.q];
 
-    const selected =
-      state.selected;
 
     s = screen(
 
@@ -1802,19 +1987,14 @@ function render(){
 
       nav() +
 
-      `
-        <div
-          style="
-            position:absolute;
-            z-index:35;
-            left:41%;
-            top:56%;
-            width:30%;
-            height:7%;
-            pointer-events:none;
-          ">
-        </div>
+      /*
+        Три большие сенсорные зоны.
+        Текст вопроса находится внутри картинки,
+        поэтому отдельный текст поверх неё
+        НЕ рисуем.
+      */
 
+      `
         <button
           class="test-option option1"
           onclick="selectAnswer(0)"
@@ -1915,9 +2095,20 @@ function render(){
   }
 
 
+  /* ---------------------------------
+     ВЫВОД
+  --------------------------------- */
+
   app.innerHTML = s;
 
-  fixStageRatio();
+
+  /*
+    После вставки HTML
+    подгоняем stage под настоящий
+    размер изображения.
+  */
+
+  fitStage();
 
 
   /* ---------------------------------
@@ -1951,11 +2142,40 @@ function render(){
     }
 
   }
+
 }
 
 
 /* =========================================================
-   СОХРАНЕНИЕ ПРИ СВЕРТЫВАНИИ / ПЕРЕХОДЕ
+   ПЕРЕСЧЁТ РАЗМЕРА ПРИ ПОВОРОТЕ
+   И ИЗМЕНЕНИИ РАЗМЕРА ЭКРАНА
+========================================================= */
+
+window.addEventListener(
+  "resize",
+  function(){
+
+    fitStage();
+
+  }
+);
+
+
+window.addEventListener(
+  "orientationchange",
+  function(){
+
+    setTimeout(
+      fitStage,
+      100
+    );
+
+  }
+);
+
+
+/* =========================================================
+   СОХРАНЕНИЕ
 ========================================================= */
 
 window.addEventListener(
@@ -1972,7 +2192,9 @@ document.addEventListener(
   "visibilitychange",
   function(){
 
-    if(document.visibilityState === "hidden"){
+    if(
+      document.visibilityState === "hidden"
+    ){
 
       saveState();
 
@@ -1988,28 +2210,22 @@ document.addEventListener(
 
 loadState();
 
+
 const loggedIn =
   isLoginValid();
 
 
 /*
-  Если пароль ещё действует —
-  сразу открываем сохранённую страницу.
+  Пароль действителен:
+  открываем сохранённое состояние.
 
-  Если пароль истёк —
-  показываем экран ввода пароля,
-  НО сохранённый тест не удаляем.
+  Пароль истёк:
+  показываем login.
+
+  При этом STATE_KEY остаётся.
 */
 
 if(loggedIn){
-
-  /*
-    Если состояние почему-то оказалось
-    некорректным, возвращаемся домой.
-
-    При нормальном состоянии сохраняется
-    последняя страница.
-  */
 
   if(!state.page){
 
@@ -2022,6 +2238,7 @@ if(loggedIn){
   state.page = "login";
 
 }
+
 
 render();
 
