@@ -1,6 +1,1999 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Любовь</title><style>*{box-sizing:border-box}html,body{margin:0;background:#000}body{display:flex;justify-content:center}#app{width:min(100vw,1000px);position:relative}.screen{position:relative;width:100%;display:none}.screen.active{display:block}.page{display:block;width:100%;height:auto}.hot{position:absolute;background:transparent;border:0;padding:0;cursor:pointer}.nav-home{left:5%;top:0;width:14%;height:6%}.nav-about{left:29%;top:0;width:14%;height:6%}.nav-us{left:47%;top:0;width:12%;height:6%}.nav-test{left:63%;top:0;width:12%;height:6%}.nav-when{left:79%;top:0;width:17%;height:6%}#loginInput{position:absolute;left:36.2%;top:42.1%;width:17.2%;height:9.4%;border:0;background:transparent;outline:0;text-align:center;color:#ff4ca0;font:bold 22px Arial}.login-heart{position:absolute;left:25%;top:28%;width:50%;height:38%;background:transparent;border:0}.login-error{position:absolute;left:34%;top:53%;width:30%;text-align:center;color:#ff1493;font-weight:bold;opacity:0}.login-error.show{opacity:1}.about-envelope{position:absolute;width:23%;height:12%;background:transparent;border:0}.env1{left:3.5%;top:40%}.env2{left:74%;top:40%}.env3{left:37%;top:45%}.env4{left:3.5%;top:53%}.env5{left:74%;top:53%}.envelope-open-screen{position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0}.back{left:0;bottom:0;width:20%;height:18%}.start-test{left:35%;top:74%;width:30%;height:16%;background:transparent;border:0}.test-overlay{position:absolute;inset:0}.test-counter{position:absolute;left:51%;top:44.2%;width:43%;height:4.2%;background:#d83c8d;color:#fff;padding:1%;font:bold 22px monospace}.test-card{position:absolute;left:51%;top:48.3%;width:43%;min-height:14.5%;background:#ffe3ed;border:6px solid #d83c8d;padding:1.5%;font:bold 18px monospace;text-align:center}.option{position:absolute;left:50%;width:47%;min-height:5.8%;background:transparent;border:0;display:flex;gap:2%;align-items:center;text-align:left;font:bold 18px monospace}.o1{top:69.4%}.o2{top:75.3%}.o3{top:81.2%}.sq{width:30px;height:30px;border:4px solid #111;background:#ffe8ef;flex:none}.selected .sq{background:#ff168e;border-color:#ff168e}.next{position:absolute;right:3%;bottom:7%;width:16%;height:14%;background:transparent;border:0;color:#d83c8d;font:bold 44px monospace}.final{position:absolute;inset:0;background:rgba(255,215,230,.96);display:flex;align-items:center;justify-content:center;text-align:center;color:#c72d7a;font:bold 28px monospace;padding:8%}.final button{margin-top:25px;padding:12px 24px;background:#d83c8d;color:#fff;border:0;border-radius:8px}@media(max-width:600px){.test-card,.option{font-size:12px}.sq{width:20px;height:20px;border-width:3px}}</style></head><body><div id="app"></div><script>
-const Q=Array.from({length:50},(_,i)=>['Вопрос '+(i+1), 'А) Вариант А','Б) Вариант Б','В) Вариант В','А']);
-const app=document.getElementById('app');let s={page:'login',env:0,q:0,sel:null,ans:Array(50).fill(null),score:0};
-function img(n){return `<img class="page" src="page-${String(n).padStart(2,'0')}.webp">`}function screen(c,x){return `<section class="screen active ${c}">${x}</section>`}function nav(){return `<button class="hot nav-home" onclick="go('home')"></button><button class="hot nav-about" onclick="go('about')"></button><button class="hot nav-us" onclick="go('us')"></button><button class="hot nav-test" onclick="go('intro')"></button><button class="hot nav-when" onclick="go('when')"></button>`}
-function render(){let x='';if(s.page==='login')x=screen('login',img(1)+`<input id="loginInput" maxlength="6" inputmode="numeric"><button class="login-heart" onclick="login()"></button><div id="err" class="login-error">Неправильная дата</div>`);else if(s.page==='home')x=screen('home',img(2)+nav()+`<button class="hot" style="left:50%;top:15.8%;width:14%;height:4.8%" onclick="go('short')"></button>`);else if(s.page==='short')x=screen('short',img(3)+nav()+`<button class="hot" style="left:50%;top:15.8%;width:14%;height:4.8%" onclick="go('home')"></button>`);else if(s.page==='about')x=screen('about',img(4)+nav()+[1,2,3,4,5].map(n=>`<button class="about-envelope env${n}" onclick="env(${n})"></button>`).join(''));else if(s.page==='closed')x=screen('closed',img(5+2*(s.env-1))+`<button class="envelope-open-screen" onclick="letter(${s.env})"></button><button class="hot back" onclick="go('about')"></button>`);else if(s.page==='letter')x=screen('letter',img(6+2*(s.env-1))+`<button class="hot back" onclick="go('about')"></button>`);else if(s.page==='us')x=screen('us',img(15)+nav());else if(s.page==='when')x=screen('when',img(18)+nav());else if(s.page==='intro')x=screen('intro',img(16)+nav()+`<button class="start-test" onclick="start()"></button>`);else if(s.page==='test')x=test();app.innerHTML=x;if(s.page==='login'){let i=document.getElementById('loginInput');i.onkeydown=e=>e.key==='Enter'&&login();i.focus()}}
-function login(){let i=document.getElementById('loginInput');if(i.value.trim()==='130425'){go('home')}else{let e=document.getElementById('err');i.value='';e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}}function go(p){s.page=p;s.sel=null;render();scrollTo(0,0)}function env(n){s.env=n;go('closed')}function letter(n){s.env=n;go('letter')}function start(){s.q=0;s.sel=null;s.ans=Array(50).fill(null);s.score=0;go('test')}function test(){let q=Q[s.q],p=s.sel;return screen('test',img(17)+nav()+`<div class="test-overlay"><div class="test-counter">${s.q+1}/50</div><div class="test-card">${q[0]}</div><button class="option o1 ${p==='А'?'selected':''}" onclick="pick('А')"><span class="sq"></span>${q[1]}</button><button class="option o2 ${p==='Б'?'selected':''}" onclick="pick('Б')"><span class="sq"></span>${q[2]}</button><button class="option o3 ${p==='В'?'selected':''}" onclick="pick('В')"><span class="sq"></span>${q[3]}</button>${s.q?'<button class="hot" style="left:1%;top:1%;width:20%;height:10%;color:#d83c8d" onclick="prev()">← назад</button>':''}<button class="next" onclick="next()" ${p?'':'disabled'}>→</button></div>`)}function pick(v){s.sel=v;render()}function next(){if(!s.sel)return;s.ans[s.q]=s.sel;if(s.q===49){s.score=s.ans.reduce((n,a,i)=>n+(a===Q[i][4]),0);return final()}s.q++;s.sel=s.ans[s.q];render()}function prev(){if(s.q){s.q--;s.sel=s.ans[s.q];render()}}function final(){app.innerHTML=screen('result',`<div class="final"><div>Тест закончен 💗<br><br>Ты набрал ${s.score} из 50.<br><br>Спасибо, что знаешь меня всё лучше.<br><br>Я люблю тебя.<br><button onclick="go('home')">На главную</button></div></div>`)}render();</script></body></html>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<title>Любовь</title>
+
+<style>
+/* =========================================================
+   ОСНОВА
+========================================================= */
+
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+  background:#000;
+}
+
+body{
+  overflow-x:hidden;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  border:0;
+  padding:0;
+  background:transparent;
+  -webkit-appearance:none;
+  appearance:none;
+}
+
+#app{
+  width:100%;
+  min-height:100vh;
+  min-height:100dvh;
+
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+
+  background:#000;
+}
+
+/*
+  Весь сайт работает внутри одного фиксированного
+  пропорционального макета.
+
+  Поэтому если экран становится меньше/больше,
+  весь макет уменьшается или увеличивается целиком,
+  а не растягивается по отдельным координатам.
+*/
+.stage{
+  position:relative;
+
+  width:min(100vw, 1000px);
+
+  aspect-ratio:1000 / 1414;
+
+  overflow:hidden;
+
+  background:#000;
+
+  flex:none;
+}
+
+.page{
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  display:block;
+
+  object-fit:fill;
+
+  pointer-events:none;
+
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-user-drag:none;
+}
+
+
+/* =========================================================
+   ВСЕ НАЖИМАЕМЫЕ ЗОНЫ
+========================================================= */
+
+.hot{
+  position:absolute;
+  z-index:50;
+
+  display:block;
+
+  border:0;
+  outline:0;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+
+  user-select:none;
+  -webkit-user-select:none;
+
+  background:transparent;
+}
+
+.hot:focus{
+  outline:none;
+}
+
+.hot:active{
+  opacity:.85;
+}
+
+
+/* =========================================================
+   ВХОД
+========================================================= */
+
+#loginInput{
+  position:absolute;
+
+  z-index:100;
+
+  left:25%;
+  top:28%;
+
+  width:50%;
+  height:11%;
+
+  padding:0 10px;
+
+  border:0;
+  outline:0;
+
+  background:transparent;
+
+  color:transparent;
+
+  caret-color:#fff;
+
+  text-align:center;
+
+  font-size:clamp(22px, 4vw, 42px);
+
+  letter-spacing:.12em;
+
+  pointer-events:auto;
+
+  touch-action:manipulation;
+
+  -webkit-user-select:text;
+  user-select:text;
+}
+
+#loginInput::selection{
+  background:rgba(255,255,255,.25);
+}
+
+.login-heart{
+  position:absolute;
+
+  z-index:90;
+
+  left:25%;
+  top:39%;
+
+  width:50%;
+  height:34%;
+
+  border:0;
+
+  background:transparent;
+
+  cursor:pointer;
+
+  pointer-events:auto;
+
+  touch-action:manipulation;
+}
+
+.login-error{
+  position:absolute;
+
+  z-index:110;
+
+  left:10%;
+  top:73%;
+
+  width:80%;
+
+  text-align:center;
+
+  color:#fff;
+
+  font-size:clamp(13px, 2.2vw, 22px);
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transition:opacity .2s ease;
+}
+
+.login-error.show{
+  opacity:1;
+}
+
+
+/* =========================================================
+   НИЖНЯЯ НАВИГАЦИЯ
+========================================================= */
+
+.nav{
+  position:absolute;
+
+  z-index:80;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  height:14%;
+
+  display:flex;
+}
+
+.nav button{
+  flex:1;
+
+  min-width:0;
+  height:100%;
+
+  background:transparent;
+
+  border:0;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+}
+
+
+/* =========================================================
+   ГЛАВНАЯ
+========================================================= */
+
+.home-short-button{
+  position:absolute;
+
+  z-index:70;
+
+  left:8%;
+  top:82%;
+
+  width:28%;
+  height:8%;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+}
+
+
+/* =========================================================
+   О ТЕБЕ
+========================================================= */
+
+.envelope-zone{
+  position:absolute;
+
+  z-index:70;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+}
+
+/*
+  Зоны расположены относительно исходного макета.
+  Так как они находятся внутри .stage,
+  на телефоне/планшете/ноутбуке они масштабируются вместе
+  с картинкой.
+*/
+
+#env1{
+  left:8%;
+  top:25%;
+  width:84%;
+  height:11%;
+}
+
+#env2{
+  left:8%;
+  top:37%;
+  width:84%;
+  height:11%;
+}
+
+#env3{
+  left:8%;
+  top:49%;
+  width:84%;
+  height:11%;
+}
+
+#env4{
+  left:8%;
+  top:61%;
+  width:84%;
+  height:11%;
+}
+
+#env5{
+  left:8%;
+  top:73%;
+  width:84%;
+  height:11%;
+}
+
+
+/* =========================================================
+   НАЗАД ИЗ КОНВЕРТА
+========================================================= */
+
+.back-zone{
+  position:absolute;
+
+  z-index:100;
+
+  left:4%;
+  top:4%;
+
+  width:20%;
+  height:10%;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+}
+
+
+/* =========================================================
+   КОНВЕРТ В ПРИБЛИЖЕНИИ
+========================================================= */
+
+.envelope-open-zone{
+  position:absolute;
+
+  z-index:90;
+
+  left:12%;
+  top:20%;
+
+  width:76%;
+  height:60%;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+}
+
+
+/* =========================================================
+   ТЕСТ — СТАРТ
+========================================================= */
+
+.test-start-zone{
+  position:absolute;
+
+  z-index:80;
+
+  left:20%;
+  top:65%;
+
+  width:60%;
+  height:15%;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+}
+
+
+/* =========================================================
+   ТЕСТ
+========================================================= */
+
+.test-counter{
+  position:absolute;
+
+  z-index:100;
+
+  left:8%;
+  top:7%;
+
+  width:84%;
+
+  text-align:center;
+
+  color:#fff;
+
+  font-size:clamp(16px, 3vw, 30px);
+
+  pointer-events:none;
+}
+
+.test-card{
+  position:absolute;
+
+  z-index:90;
+
+  left:7%;
+  top:17%;
+
+  width:86%;
+  height:67%;
+
+  padding:5%;
+
+  display:flex;
+  flex-direction:column;
+
+  color:#fff;
+
+  pointer-events:none;
+}
+
+.test-question{
+  width:100%;
+
+  text-align:center;
+
+  font-size:clamp(15px, 2.5vw, 27px);
+
+  line-height:1.3;
+
+  margin-bottom:5%;
+}
+
+.test-options{
+  width:100%;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:2.2%;
+
+  pointer-events:auto;
+}
+
+.test-option{
+  position:relative;
+
+  width:100%;
+  min-height:52px;
+
+  padding:12px 16px;
+
+  border:1px solid rgba(255,255,255,.45);
+
+  border-radius:16px;
+
+  color:#fff;
+
+  background:rgba(0,0,0,.28);
+
+  text-align:left;
+
+  font-size:clamp(13px, 2.1vw, 21px);
+
+  line-height:1.25;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    transform .1s ease;
+}
+
+.test-option:active{
+  transform:scale(.985);
+}
+
+.test-option.selected{
+  background:rgba(255,255,255,.22);
+
+  border-color:#fff;
+}
+
+.test-navigation{
+  position:absolute;
+
+  z-index:100;
+
+  left:6%;
+  right:6%;
+  bottom:4%;
+
+  height:9%;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  pointer-events:auto;
+}
+
+.test-navigation button{
+  width:28%;
+  height:100%;
+
+  border:1px solid rgba(255,255,255,.4);
+
+  border-radius:30px;
+
+  color:#fff;
+
+  background:rgba(0,0,0,.25);
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+}
+
+.test-navigation button:disabled{
+  opacity:.25;
+  pointer-events:none;
+}
+
+
+/* =========================================================
+   РЕЗУЛЬТАТ
+========================================================= */
+
+.result-overlay{
+  position:absolute;
+
+  z-index:200;
+
+  inset:0;
+
+  display:flex;
+
+  justify-content:center;
+  align-items:center;
+
+  padding:10%;
+
+  background:rgba(0,0,0,.72);
+
+  color:#fff;
+
+  text-align:center;
+}
+
+.result-box{
+  width:100%;
+
+  max-width:600px;
+
+  padding:8% 7%;
+
+  border:1px solid rgba(255,255,255,.4);
+
+  border-radius:24px;
+
+  background:rgba(0,0,0,.65);
+}
+
+.result-title{
+  font-size:clamp(24px, 5vw, 46px);
+
+  margin-bottom:20px;
+}
+
+.result-score{
+  font-size:clamp(20px, 4vw, 36px);
+
+  margin-bottom:28px;
+}
+
+.result-button{
+  width:100%;
+
+  min-height:50px;
+
+  margin-top:12px;
+
+  border:1px solid rgba(255,255,255,.45);
+
+  border-radius:30px;
+
+  color:#fff;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+}
+
+
+/* =========================================================
+   МОБИЛЬНЫЕ
+========================================================= */
+
+@media (max-width:600px){
+
+  .stage{
+    width:100vw;
+    max-width:100vw;
+  }
+
+  .test-card{
+    padding:4%;
+  }
+
+  .test-option{
+    min-height:46px;
+
+    padding:9px 11px;
+
+    border-radius:12px;
+  }
+}
+
+
+/* =========================================================
+   ПЛАНШЕТ
+========================================================= */
+
+@media (min-width:601px) and (max-width:1100px){
+
+  .stage{
+    width:100vw;
+    max-width:1000px;
+  }
+}
+
+
+/* =========================================================
+   БОЛЬШОЙ ЭКРАН
+========================================================= */
+
+@media (min-width:1101px){
+
+  .stage{
+    width:1000px;
+  }
+}
+</style>
+</head>
+
+
+<body>
+
+<div id="app"></div>
+
+
+<script>
+
+/* =========================================================
+   50 ВОПРОСОВ
+=========================================================
+
+   Формат каждого вопроса:
+
+   [
+     "Вопрос",
+     "Вариант А",
+     "Вариант Б",
+     "Вариант В",
+     "Правильная буква"
+   ]
+
+========================================================= */
+
+const Q = [
+
+[
+'Если я говорю «я не хочу есть», насколько вероятно, что через час я скажу, что голодная?',
+'10%',
+'50%',
+'90%',
+'В'
+],
+
+[
+'Если мне что-то очень нравится, я скорее…',
+'Буду постоянно об этом говорить',
+'Сделаю вид, что мне всё равно',
+'Никому об этом не расскажу',
+'А'
+],
+
+[
+'Если я устала, что во мне меняется первым?',
+'Настроение',
+'Аппетит',
+'Желание разговаривать',
+'В'
+],
+
+[
+'Если я чего-то хочу, но боюсь попросить, я скорее…',
+'Намекну',
+'Скажу прямо',
+'Вообще ничего не скажу',
+'А'
+],
+
+[
+'Если я обиделась, но не хочу говорить об этом, я скорее…',
+'Стану холоднее, но буду делать вид, что всё хорошо',
+'Буду общаться как всегда',
+'Сразу скажу',
+'А'
+],
+
+[
+'Если я нервничаю перед чем-то важным, я скорее…',
+'Перестаю нормально спать',
+'Начинаю всё перепроверять',
+'Стараюсь вообще об этом не думать',
+'В'
+],
+
+[
+'Когда я очень счастлива, я скорее…',
+'Начинаю много говорить',
+'Становлюсь спокойнее',
+'Не могу перестать улыбаться',
+'В'
+],
+
+[
+'Если я не хочу что-то делать, меня легче всего убедить…',
+'Хорошей аргументацией',
+'Лаской и заботой',
+'Шуткой',
+'Б'
+],
+
+[
+'Что я обычно делаю перед тем, как начать важное дело?',
+'Откладываю его',
+'Всё перепроверяю',
+'Сразу начинаю',
+'А'
+],
+
+[
+'Что я делаю, когда пытаюсь скрыть, что расстроилась?',
+'Становлюсь слишком спокойной',
+'Начинаю улыбаться и шутить',
+'Просто молчу',
+'В'
+],
+
+[
+'Как я обычно реагирую на неловкую ситуацию?',
+'Шучу',
+'Молчу',
+'Хочу поскорее уйти',
+'А'
+],
+
+[
+'Если я внезапно замолчала во время разговора, скорее всего…',
+'Я обиделась',
+'Я что-то обдумываю',
+'Я просто устала',
+'А'
+],
+
+[
+'Если я говорю «всё нормально», что это означает?',
+'Всё нормально',
+'Всё хорошо',
+'Всё плохо',
+'В'
+],
+
+[
+'Что мне сложнее всего сделать после ссоры?',
+'Написать первой',
+'Признать, что я была неправа',
+'Перестать думать о ситуации',
+'Б'
+],
+
+[
+'Если я чего-то сильно жду, я скорее…',
+'Постоянно проверяю время',
+'Стараюсь отвлечься',
+'Представляю, как всё произойдёт',
+'В'
+],
+
+[
+'Как я реагирую, когда планы внезапно меняются?',
+'Спокойно перестраиваюсь',
+'Меня это раздражает',
+'Сначала паникую, потом привыкаю',
+'Б'
+],
+
+[
+'Если мне нужно выбрать подарок человеку, я скорее…',
+'Буду искать идеальный вариант',
+'Выберу что-нибудь практичное',
+'Придумаю что-нибудь личное',
+'А'
+],
+
+[
+'Что меня может обидеть сильнее всего?',
+'Равнодушие',
+'Резкие слова',
+'Когда меня не слышат',
+'А'
+],
+
+[
+'Что для меня хуже?',
+'Когда человек врёт',
+'Когда человек скрывает правду',
+'Когда человек делает вид, что ему всё равно',
+'А'
+],
+
+[
+'Что мне труднее всего сказать человеку, который мне дорог?',
+'Мне больно',
+'Мне тебя не хватает',
+'Мне нужна твоя помощь',
+'В'
+],
+
+[
+'Когда я действительно доверяю человеку, я…',
+'Рассказываю ему практически всё',
+'Перестаю контролировать каждую мелочь',
+'Не боюсь показывать слабость',
+'В'
+],
+
+[
+'Что меня быстрее всего успокоит после плохого дня?',
+'Разговор',
+'Объятия',
+'Время наедине с собой',
+'Б'
+],
+
+[
+'Что заставляет меня чувствовать себя особенно любимой?',
+'Когда меня слушают',
+'Когда обо мне заботятся без просьб',
+'Когда мне говорят о своих чувствах',
+'Б'
+],
+
+[
+'Что я скорее замечу: большой подарок или маленькую деталь, которую человек запомнил обо мне?',
+'Большой подарок',
+'Маленькую деталь',
+'Зависит от ситуации',
+'Б'
+],
+
+[
+'Если я переживаю из-за чего-то, что мне нужно от близкого человека?',
+'Совет',
+'Поддержка',
+'Решение проблемы',
+'В'
+],
+
+[
+'Как я понимаю, что человек действительно меня любит?',
+'По его словам',
+'По его поступкам',
+'По тому, как он ведёт себя со мной в мелочах',
+'В'
+],
+
+[
+'Если я говорю «мне не холодно», что вероятнее всего произойдёт через некоторое время?',
+'Мне действительно не станет холодно',
+'Я всё-таки замёрзну',
+'Я начну жаловаться на холод',
+'Б'
+],
+
+[
+'Если я говорю «я не обиделась», что это может означать?',
+'Я не обиделась',
+'Я обиделась, но не хочу говорить',
+'Я уже почти перестала обижаться',
+'Б'
+],
+
+[
+'Если я начинаю рассказывать одну историю и внезапно ухожу в сторону, я…',
+'Забыла, о чём говорила',
+'Просто вспомнила ещё одну историю',
+'Проверяю твоё внимание',
+'Б'
+],
+
+[
+'Как я могу вести себя в одной и той же ситуации?',
+'Всегда одинаково',
+'По-разному — всё зависит от моего настроения',
+'Обычно противоположно тому, чего от меня ожидают',
+'Б'
+],
+
+[
+'Что лучше всего описывает моё настроение?',
+'Его довольно легко предсказать',
+'Оно часто меняется',
+'Оно почти никогда не меняется',
+'Б'
+],
+
+[
+'Я говорю: «Ничего». Перевод с моего языка:',
+'Ничего',
+'Сейчас лучше не продолжать этот разговор',
+'Конечно же, это значит совсем не «ничего»',
+'В'
+],
+
+[
+'Если я говорю «мне всё равно», скорее всего…',
+'Мне действительно всё равно',
+'Мне не всё равно, просто я не хочу это показывать',
+'Я ещё не определилась',
+'Б'
+],
+
+[
+'Если я рассказываю тебе какую-то мелочь, которая произошла за день, это скорее значит, что…',
+'Мне просто нечем заняться',
+'Мне хочется поделиться именно с тобой',
+'Я хочу услышать твоё мнение',
+'Б'
+],
+
+[
+'Если мне хочется внимания, но я не хочу просить его напрямую, я скорее…',
+'Стану сама чаще писать',
+'Начну намекать',
+'Сделаю вид, что мне вообще не нужно внимание',
+'Б'
+],
+
+[
+'Если мы долго не виделись, что мне важнее всего в нашей встрече?',
+'Чтобы мы куда-нибудь сходили',
+'Просто побыть рядом с тобой',
+'Чтобы мы много разговаривали',
+'Б'
+],
+
+[
+'Если я рассказываю тебе о своей проблеме, чего я чаще всего хочу в первую очередь?',
+'Чтобы ты решил проблему',
+'Чтобы ты просто выслушал меня',
+'Чтобы ты меня отвлёк',
+'А'
+],
+
+[
+'Если я говорю, что «ничего не хочу», но ты знаешь, что я устала, что мне скорее всего нужно?',
+'Чтобы меня оставили одну',
+'Забота и внимание без лишних вопросов',
+'Чтобы меня рассмешили',
+'Б'
+],
+
+[
+'Если я получаю от тебя неожиданный подарок или сюрприз, что меня тронет сильнее всего?',
+'Сам факт подарка',
+'То, что ты запомнил какую-то мелочь обо мне',
+'Его стоимость и масштаб',
+'Б'
+],
+
+[
+'Если я вдруг начинаю говорить «ладно, всё», скорее всего…',
+'Я действительно закончила разговор',
+'Я устала объяснять, жду понимание',
+'Я просто хочу сменить тему',
+'Б'
+],
+
+[
+'Что для меня важнее всего в отношениях?',
+'Постоянно проводить всё свободное время вместе',
+'Чувствовать, что меня любят и выбирают даже в мелочах',
+'Никогда не ссориться',
+'Б'
+],
+
+[
+'Если я получила хорошую новость, кому мне скорее всего захочется рассказать об этом первой?',
+'Тебе',
+'Подруге',
+'Я вообще никому сразу не расскажу',
+'А'
+],
+
+[
+'Если мне что-то приснилось и сон был странным, я скорее…',
+'Забуду о нём через пять минут',
+'Буду весь день думать, что он значит',
+'Расскажу тебе и буду обсуждать его',
+'В'
+],
+
+[
+'Если ты заметишь, что я стала отвечать короче обычного, это скорее значит, что…',
+'Я просто занята',
+'Что-то произошло и меня это задело',
+'Я просто устала от общения',
+'Б'
+],
+
+[
+'Если я долго выбираю, что надеть, скорее всего…',
+'Я не знаю, чего хочу',
+'Я хочу, чтобы всё выглядело именно так, как я придумала',
+'Я в итоге надену первое, что увидела',
+'Б'
+],
+
+[
+'Если я говорю «потом расскажу», скорее всего…',
+'Я действительно забуду',
+'Сейчас не подходящий момент, но я хочу рассказать',
+'Я передумала рассказывать',
+'А'
+],
+
+[
+'Если я что-то очень хочу купить, но сомневаюсь, я скорее…',
+'Куплю сразу',
+'Буду долго думать, нужно ли мне это',
+'Попрошу тебя решить за меня',
+'Б'
+],
+
+[
+'Если я не могу уснуть, что вероятнее всего происходит у меня в голове?',
+'Ни о чем не думаю',
+'Я начинаю думать обо всём подряд',
+'Я думаю только о том, что произошло за день',
+'Б'
+],
+
+[
+'Если я сказала «мне всё равно, выбирай сам», что я могу сделать через пять минут?',
+'Действительно соглашусь с твоим выбором',
+'Вдруг предложу свой вариант',
+'Спрошу, почему ты выбрал именно это',
+'Б'
+],
+
+[
+'Если мне хочется плакать, но я стараюсь держаться, я скорее…',
+'Стану молчаливой',
+'Начну очень много шутить',
+'Постараюсь сделать вид, что всё нормально',
+'В'
+]
+
+];
+
+
+/* =========================================================
+   СОСТОЯНИЕ
+========================================================= */
+
+const state = {
+  page:'login',
+
+  envelope:0,
+  envelopeStage:0,
+
+  q:0,
+  selected:null,
+
+  answers:Array(Q.length).fill(null),
+
+  score:0
+};
+
+
+/* =========================================================
+   ПУТИ К КАРТИНКАМ
+========================================================= */
+
+function img(number){
+
+  const n = String(number).padStart(2,'0');
+
+  return `
+    <img
+      class="page"
+      src="page-${n}.webp"
+      alt=""
+      draggable="false"
+    >
+  `;
+}
+
+
+/* =========================================================
+   СОЗДАНИЕ ЭКРАНА
+========================================================= */
+
+function stage(content){
+
+  return `
+    <div class="stage">
+      ${content}
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   БЕЗОПАСНЫЙ ТЕКСТ
+========================================================= */
+
+function esc(text){
+
+  return String(text)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+
+/* =========================================================
+   НАВИГАЦИЯ
+========================================================= */
+
+function goHome(){
+
+  state.page='home';
+
+  render();
+
+}
+
+
+function goAbout(){
+
+  state.page='about';
+
+  state.envelope=0;
+  state.envelopeStage=0;
+
+  render();
+
+}
+
+
+function goUs(){
+
+  state.page='us';
+
+  render();
+
+}
+
+
+function goTest(){
+
+  state.page='testIntro';
+
+  render();
+
+}
+
+
+function goWhen(){
+
+  state.page='when';
+
+  render();
+
+}
+
+
+/* =========================================================
+   ВХОД
+========================================================= */
+
+function login(){
+
+  const input = document.getElementById('loginInput');
+
+  if(!input){
+    return;
+  }
+
+  const value = String(input.value || '').trim();
+
+  if(value === '130425'){
+
+    state.page='home';
+
+    render();
+
+    return;
+  }
+
+  input.value='';
+
+  const error = document.getElementById('err');
+
+  if(error){
+
+    error.classList.add('show');
+
+    window.setTimeout(function(){
+
+      error.classList.remove('show');
+
+    },1800);
+
+  }
+
+}
+
+
+/* =========================================================
+   ПОЛЕ ВХОДА
+========================================================= */
+
+function setupLogin(){
+
+  const input = document.getElementById('loginInput');
+
+  if(!input){
+    return;
+  }
+
+  input.addEventListener('keydown',function(event){
+
+    if(event.key === 'Enter'){
+
+      event.preventDefault();
+
+      login();
+
+    }
+
+  });
+
+}
+
+
+/* =========================================================
+   ГЛАВНАЯ
+========================================================= */
+
+function homeShort(){
+
+  state.page='homeShort';
+
+  render();
+
+}
+
+
+/* =========================================================
+   КОНВЕРТЫ
+========================================================= */
+
+function chooseEnvelope(number){
+
+  state.envelope=number;
+
+  state.envelopeStage=1;
+
+  render();
+
+}
+
+
+function openEnvelope(){
+
+  if(!state.envelope){
+    return;
+  }
+
+  state.envelopeStage=2;
+
+  render();
+
+}
+
+
+function backEnvelope(){
+
+  if(state.envelopeStage === 2){
+
+    state.envelopeStage=1;
+
+  }else{
+
+    state.envelope=0;
+    state.envelopeStage=0;
+    state.page='about';
+
+  }
+
+  render();
+
+}
+
+
+/* =========================================================
+   ТЕСТ
+========================================================= */
+
+function startTest(){
+
+  state.q=0;
+
+  state.selected=null;
+
+  state.score=0;
+
+  state.answers=Array(Q.length).fill(null);
+
+  state.page='test';
+
+  render();
+
+}
+
+
+function selectAnswer(letter){
+
+  state.selected=letter;
+
+  state.answers[state.q]=letter;
+
+  render();
+
+}
+
+
+function previousQuestion(){
+
+  if(state.q <= 0){
+    return;
+  }
+
+  state.q--;
+
+  state.selected=state.answers[state.q] || null;
+
+  render();
+
+}
+
+
+function nextQuestion(){
+
+  if(state.selected === null){
+    return;
+  }
+
+  state.answers[state.q]=state.selected;
+
+  if(state.q < Q.length - 1){
+
+    state.q++;
+
+    state.selected=state.answers[state.q] || null;
+
+    render();
+
+    return;
+  }
+
+  calculateResult();
+
+}
+
+
+function calculateResult(){
+
+  let score=0;
+
+  for(let i=0;i<Q.length;i++){
+
+    if(state.answers[i] === Q[i][4]){
+
+      score++;
+
+    }
+
+  }
+
+  state.score=score;
+
+  state.page='testResult';
+
+  render();
+
+}
+
+
+function restartTest(){
+
+  startTest();
+
+}
+
+
+/* =========================================================
+   НАВИГАЦИЯ В ТЕСТЕ
+========================================================= */
+
+function testNavigation(){
+
+  const previousDisabled =
+    state.q === 0 ? 'disabled' : '';
+
+  const isLast =
+    state.q === Q.length - 1;
+
+  const nextText =
+    isLast ? 'Завершить' : 'Далее';
+
+  return `
+    <div class="test-navigation">
+
+      <button
+        onclick="previousQuestion()"
+        ${previousDisabled}
+      >
+        Назад
+      </button>
+
+      <button
+        onclick="nextQuestion()"
+      >
+        ${nextText}
+      </button>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   ЭКРАН ТЕСТА
+========================================================= */
+
+function renderTest(){
+
+  const question=Q[state.q];
+
+  let html='';
+
+  html += img(17);
+
+  html += `
+    <div class="test-counter">
+      ${state.q + 1} / ${Q.length}
+    </div>
+  `;
+
+  html += `
+    <div class="test-card">
+
+      <div class="test-question">
+        ${esc(question[0])}
+      </div>
+
+      <div class="test-options">
+
+        <button
+          class="test-option ${state.selected === 'А' ? 'selected' : ''}"
+          onclick="selectAnswer('А')"
+        >
+          А) ${esc(question[1])}
+        </button>
+
+        <button
+          class="test-option ${state.selected === 'Б' ? 'selected' : ''}"
+          onclick="selectAnswer('Б')"
+        >
+          Б) ${esc(question[2])}
+        </button>
+
+        <button
+          class="test-option ${state.selected === 'В' ? 'selected' : ''}"
+          onclick="selectAnswer('В')"
+        >
+          В) ${esc(question[3])}
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  html += testNavigation();
+
+  return stage(html);
+
+}
+
+
+/* =========================================================
+   РЕЗУЛЬТАТ
+========================================================= */
+
+function renderResult(){
+
+  let html='';
+
+  html += img(17);
+
+  html += `
+    <div class="result-overlay">
+
+      <div class="result-box">
+
+        <div class="result-title">
+          Тест закончен
+        </div>
+
+        <div class="result-score">
+          ${state.score} из ${Q.length}
+        </div>
+
+        <button
+          class="result-button"
+          onclick="restartTest()"
+        >
+          Пройти ещё раз
+        </button>
+
+        <button
+          class="result-button"
+          onclick="goHome()"
+        >
+          На главную
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  return stage(html);
+
+}
+
+
+/* =========================================================
+   РАЗДЕЛ «О ТЕБЕ»
+========================================================= */
+
+function renderAbout(){
+
+  let html='';
+
+  html += img(4);
+
+  html += `
+    <button
+      id="env1"
+      class="envelope-zone"
+      onclick="chooseEnvelope(1)"
+      aria-label="Конверт 1"
+    ></button>
+
+    <button
+      id="env2"
+      class="envelope-zone"
+      onclick="chooseEnvelope(2)"
+      aria-label="Конверт 2"
+    ></button>
+
+    <button
+      id="env3"
+      class="envelope-zone"
+      onclick="chooseEnvelope(3)"
+      aria-label="Конверт 3"
+    ></button>
+
+    <button
+      id="env4"
+      class="envelope-zone"
+      onclick="chooseEnvelope(4)"
+      aria-label="Конверт 4"
+    ></button>
+
+    <button
+      id="env5"
+      class="envelope-zone"
+      onclick="chooseEnvelope(5)"
+      aria-label="Конверт 5"
+    ></button>
+  `;
+
+  return html;
+
+}
+
+
+/* =========================================================
+   КОНКРЕТНЫЙ КОНВЕРТ
+========================================================= */
+
+function renderEnvelope(){
+
+  const closedPages={
+    1:5,
+    2:7,
+    3:9,
+    4:11,
+    5:13
+  };
+
+  const openedPages={
+    1:6,
+    2:8,
+    3:10,
+    4:12,
+    5:14
+  };
+
+  let html='';
+
+  if(state.envelopeStage === 1){
+
+    html += img(closedPages[state.envelope]);
+
+    html += `
+      <button
+        class="back-zone"
+        onclick="backEnvelope()"
+        aria-label="Назад"
+      ></button>
+
+      <button
+        class="envelope-open-zone"
+        onclick="openEnvelope()"
+        aria-label="Открыть"
+      ></button>
+    `;
+
+  }else{
+
+    html += img(openedPages[state.envelope]);
+
+    html += `
+      <button
+        class="back-zone"
+        onclick="backEnvelope()"
+        aria-label="Назад"
+      ></button>
+    `;
+
+  }
+
+  return stage(html);
+
+}
+
+
+/* =========================================================
+   НИЖНЯЯ НАВИГАЦИЯ
+========================================================= */
+
+function navigation(){
+
+  return `
+    <div class="nav">
+
+      <button
+        onclick="goHome()"
+        aria-label="Главная"
+      ></button>
+
+      <button
+        onclick="goAbout()"
+        aria-label="О тебе"
+      ></button>
+
+      <button
+        onclick="goUs()"
+        aria-label="Мы"
+      ></button>
+
+      <button
+        onclick="goTest()"
+        aria-label="Тест"
+      ></button>
+
+      <button
+        onclick="goWhen()"
+        aria-label="Когда"
+      ></button>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   ОСНОВНОЙ RENDER
+========================================================= */
+
+function render(){
+
+  const app=document.getElementById('app');
+
+  let html='';
+
+
+  /* -------------------------------------------------------
+     LOGIN
+  ------------------------------------------------------- */
+
+  if(state.page === 'login'){
+
+    html=stage(`
+
+      ${img(1)}
+
+      <input
+        id="loginInput"
+
+        type="text"
+
+        inputmode="numeric"
+
+        pattern="[0-9]*"
+
+        maxlength="6"
+
+        autocomplete="off"
+
+        autocorrect="off"
+
+        autocapitalize="off"
+
+        spellcheck="false"
+
+        aria-label="Код"
+      >
+
+      <button
+        class="login-heart"
+        onclick="login()"
+        aria-label="Войти"
+      ></button>
+
+      <div
+        id="err"
+        class="login-error"
+      >
+        Неправильная дата
+      </div>
+
+    `);
+
+    app.innerHTML=html;
+
+    setupLogin();
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     HOME
+  ------------------------------------------------------- */
+
+  if(state.page === 'home'){
+
+    html=stage(`
+
+      ${img(2)}
+
+      <button
+        class="home-short-button"
+        onclick="homeShort()"
+        aria-label="Сократить"
+      ></button>
+
+      ${navigation()}
+
+    `);
+
+    app.innerHTML=html;
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     HOME SHORT
+  ------------------------------------------------------- */
+
+  if(state.page === 'homeShort'){
+
+    html=stage(`
+
+      ${img(3)}
+
+      <button
+        class="home-short-button"
+        onclick="goHome()"
+        aria-label="Обратно"
+      ></button>
+
+      ${navigation()}
+
+    `);
+
+    app.innerHTML=html;
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     ABOUT
+  ------------------------------------------------------- */
+
+  if(state.page === 'about'){
+
+    if(state.envelopeStage !== 0){
+
+      app.innerHTML=renderEnvelope();
+
+      return;
+    }
+
+    html=stage(`
+      ${renderAbout()}
+      ${navigation()}
+    `);
+
+    app.innerHTML=html;
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     US
+  ------------------------------------------------------- */
+
+  if(state.page === 'us'){
+
+    html=stage(`
+
+      ${img(15)}
+
+      ${navigation()}
+
+    `);
+
+    app.innerHTML=html;
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     TEST INTRO
+  ------------------------------------------------------- */
+
+  if(state.page === 'testIntro'){
+
+    html=stage(`
+
+      ${img(16)}
+
+      <button
+        class="test-start-zone"
+        onclick="startTest()"
+        aria-label="Начать тест"
+      ></button>
+
+      ${navigation()}
+
+    `);
+
+    app.innerHTML=html;
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     TEST
+  ------------------------------------------------------- */
+
+  if(state.page === 'test'){
+
+    app.innerHTML=renderTest();
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     TEST RESULT
+  ------------------------------------------------------- */
+
+  if(state.page === 'testResult'){
+
+    app.innerHTML=renderResult();
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     WHEN
+  ------------------------------------------------------- */
+
+  if(state.page === 'when'){
+
+    html=stage(`
+
+      ${img(18)}
+
+      ${navigation()}
+
+    `);
+
+    app.innerHTML=html;
+
+    return;
+  }
+
+}
+
+
+/* =========================================================
+   ЗАПУСК
+========================================================= */
+
+render();
+
+</script>
+
+</body>
+</html>
